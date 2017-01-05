@@ -1,0 +1,50 @@
+Team C#
+
+Team Members :
+    Kevin Zhang
+    Tina La
+
+Project Name:
+    CLite2    
+    
+Project Description :
+    - This project is intended to be a replica of sqlite3, with as many of its features as possible, except coded in C.
+    - It will be a command-line utility that works very similarly to sqlite3 ( with similar commands and etc.)
+    - The program will need to run with a given file parameter ( won't work without it ), and present with a shell that will allow the user to type in commands
+
+Technical Description :
+    There are several components to this program
+    1. File Locking ( Kevin )
+        - For locking the file while it is in use, we will probably implement sempaphores to control access to the file. This is why the file name is necessary, as we are unsure of how to do temporary files. If we have time at the end, we may implement the temporary files.
+        - This will use semaphores and file reading.
+    2. Shell ( Tina )
+        - Similar to the shell we worked on in the past, we will a shell command prompt for the user to execute the commands they want. This will handle user input and interpret it for the rest of the program to do the work. This includes getting rid of extra whitespace, formatting char arrays in the correct way, and returning errors if command isn't one that we worked on.
+        - This will use forking, fgets, and string.h methods to process string data.
+    3. Command Execution P1 ( Tina )
+        - All the . commands will be done here. I am separating this because there are a lot of commands to execute, so it would be better if we split the work. I'm not sure how many . commands I will want, but .tables, .quit, .help, and .exit will definitely be amongst the ones we will have.
+        - This will use file reading and execvp (with forking).
+    4. Command Execution P2 ( Kevin and Tina )
+        - All of the database related commands ( INSERT INTO, DELETE, CREATE, etc. ) will be written here. Not sure how I will implement the Type BLOB, nor am I sure if I want to. INT and TEXT will be done, however
+        - This will use string.h methods to process data, and create formatted data.
+    5. Database Processing ( Kevin )
+        - In order to store all the data in the proper format, we will have to attach surrounding tags to the data. Some characters that represent these characters may have to be modified, although it may be unlikely that a user will stumble upon these tags.
+        - Also, read and write functions will have to be done here. Although our other components will decide what to put, this is responsible for putting that into the right format.
+        - This will use file reading and writing. Anything that wants to do stuff to a file will have to pass through this first. 
+
+Additional Information :
+    - We will likely be using arrays of various types, perhaps even structs to make it easier on use. Memory Allocation comes with the territory.
+    - Working with files is the basis of this project, as is finding information regarding them.
+    - We may include Signal handling, but that may be left for later, as an additional feature to implement
+    - We won't be using pipes, shared mem, or networking. It is possible that we may use these in the far future, but we do not foresee it in the immediate future.
+
+Timeline :
+    - 01/09/2017 Monday : File Locking is part of Database Processing, because the reading and writing process is implemented in Database Processing. Implement the majority of the Database Processing functions and decide on the tags that we should be using. Define data structs and implement conversion of that into text format for data storage. This part will probably be modified in later dates to deal with new problems.
+    - 01/11/2017 Wednesday : Get Shell implemented, as well as beginning stages of command execution.
+    - 01/16/2017 Monday : Finish Command Execution P1 and P2. If necessary, modify DB Processing for missing info. This is the bulk of our code, and if time permits, we may extend deadline.
+    - 01/18/2017 Wednesday : Have a working version of CLite2. If we have time remaining, implement additional features. 
+    - 01/??/2017 ???? : Present working project.
+
+    
+
+    
+ 
