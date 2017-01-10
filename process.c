@@ -165,7 +165,7 @@ struct data_table turnStringToTable( char * fullString, char * tablename ){ // A
             (*dataEntry).INT_VAL = atoi(dtValue);
           }else{
             printf("TYPE NOT SUPPORTED, SOMETHING WENT WRONG\n");
-            return;
+            break;
           }
           valueRow[counter] = *dataEntry;
           counter++;
