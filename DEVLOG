@@ -4,4 +4,8 @@ kevinZ -- 2017-01-09 8:15 PM
     Finished about half of process.c
     Done with reading from the database, but not writing to the database.
     This turned out to be a lot longer than I thought, and will probably require heavy testing before I move along.
-   
+kevinZ -- 2017-01-10 11:27 PM
+    Debugging process.c
+    Managed to get a large portion of the reading portion working. Will be working on writing tomorrow
+    readTables and openFileAttempt are still untested, although I will test them very soon.
+       

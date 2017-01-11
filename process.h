@@ -16,4 +16,4 @@ struct data_table * readTables(int fd);
 void lock();
 void unlock();
 char * findStringPair( char ** originalString, char * firstDenom, char * secondDenom);
-struct data_table turnStringToTable(char * fullString, char * tablename);
+struct data_table turnStringToTable(char ** fullString, char * tablename);
