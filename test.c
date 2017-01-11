@@ -9,7 +9,8 @@ int main(){
 
   printf("=========================\n");
   
-  printf("\nTesting findStringPair\n");
+  printf("Testing findStringPair\n\n");
+  
   char * fullString = (char *)malloc(sizeof(char *));
   strcpy(fullString, "<TABLE:TABLENAME>Blah Blah<TABLE_END:TABLENAME>SomethingElse");
   char denom1[256];
@@ -20,13 +21,13 @@ int main(){
   printf("\tdenom1:[%s]\n", denom1);
   printf("\tdenom2:[%s]\n", denom2);
   printf("\nfindStringPair output:[%s]\n", findStringPair(&fullString, denom1, denom2));
-  printf("Result of FullString after OP:[%s]", fullString);
+  printf("Result of FullString after OP:[%s]\n", fullString);
 
   printf("\nTesting Complete, Moving on\n");
 
   printf("=========================\n");
 
-
+  
 
   //int fd = openFileAttempt("testfile");
   
