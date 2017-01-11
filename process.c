@@ -180,7 +180,12 @@ struct data_table turnStringToTable( char * fullString, char * tablename ){ // A
 }
 
 char * findStringPair(char ** originalString, char * firstDenom, char * secondDenom ){
-  strsep(originalString, firstDenom); // orginalString location set to after first Denom
-  char * result = strsep(originalString, secondDenom); //originalString location set to after secondDenom
+  //printf("OriginalString:[%s]\n", *originalString);
+  // printf("First Denom:[%s]\n", firstDenom);
+  char * result = strstr(*originalString, firstDenom)+strlen(firstDenom);
+  char * temp = strstr(*originalString, secondDenom)+strlen(secondDenom);
+  *strstr(result, secondDenom) = 0;
+  *originalString = temp;
   return result;  
 }
+
