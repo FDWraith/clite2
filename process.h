@@ -11,8 +11,15 @@ struct data_table {
   struct data_entry * * VALUES;
 };
 
+struct database{
+  char * * TABLENAMES;
+  int NUM_OF_TABLES;
+  struct data_table * DATATABLES;
+};
+
+
 int openFileAttempt(char * filename);
-struct data_table * readTables(int fd);
+struct database * readDatabase(int fd);
 void lock();
 void unlock();
 char * findStringPair( char ** originalString, char * firstDenom, char * secondDenom);

@@ -26,8 +26,14 @@ struct data_table {
   struct data_entry * * VALUES;
 };
 
+struct database{
+  int NUM_OF_TABLES;
+  char * * TABLENAMES;
+  struct data_table * DATATABLES;
+};
+
 int openFileAttempt(char * filename);
-struct data_table * readTables(int fd);
+struct database * readDatabase(int fd);
 void lock();
 void unlock();
 char * findStringPair( char ** originalString, char * firstDenom, char * secondDenom);
@@ -42,7 +48,6 @@ void lock(){
   sb.sem_num = 1;
   sb.sem_flg = SEM_UNDO;
   semop(semid, &sb, 1);
-  printf("inside semaphore\n");
 }
 
 void unlock(){
@@ -54,7 +59,6 @@ void unlock(){
   sb.sem_flg = SEM_UNDO;
   sb.sem_op = 1;
   semop(semid, &sb, 1);
-  printf("Exited semaphore\n");
 }
 
 int openFileAttempt( char * filename ){
@@ -62,36 +66,39 @@ int openFileAttempt( char * filename ){
   int * fd = (int *)(malloc( sizeof(int) ));
   lock();
   umask(0);
-  printf("attempting file open\n");
   *fd = open(filename, O_CREAT | O_RDWR);
-  printf("file opened\n");
   unlock();
   return *fd;
 }
 
-struct data_table * readTables( int fd ){
+struct database * readDatabase( int fd ){
   struct stat buf;
   struct data_table * tables;
+  char ** tablenames = (char **)malloc(sizeof(char *) * STND_SIZE);
+  struct database * db = (struct database *)malloc(sizeof (struct database) + STND_SIZE);
   int err;
   lock();
   err = fstat( fd, &buf);
   if( err < 0 ){
     printf("Something went wrong with fstat:%s\n", strerror(errno));
-    return 0;
   }
-  char * fullString;
-  err = read(fd, &fullString, buf.st_size );//read size of file into fullString
+  char * fullString = (char *)malloc( buf.st_size + STND_SIZE);
+  err = read(fd, fullString, buf.st_size );//read size of file into fullString
   if( err < 0 ){
     printf("Something went wrong with read:%s\n", strerror(errno));
-    return 0;
-  }  
+  }
   char * dbInfo = findStringPair(&fullString, "<DATABASE_INFO>", "<DATABASE_INFO_END>");
   char * tableList = strsep(&dbInfo, "!");
-  int numOfTables = atoi( strsep(&dbInfo, "!") );
-  tables = calloc(numOfTables, sizeof(struct data_table) );
+  printf("dbInfo:[%s]\n", dbInfo );
+  char copy[256];
+  strcpy( copy, dbInfo);
+  (*db).NUM_OF_TABLES = atoi(copy);
+  printf("NUM_OF_TABLES:[%d]\n", (*db).NUM_OF_TABLES);
+  tables = calloc((*db).NUM_OF_TABLES, sizeof(struct data_table) );
   int counter = 0;
   while( tableList ){
     char * currentTable = strsep( &tableList, "|");
+    tablenames[counter] = currentTable;
     struct data_table * singleTable = (struct data_table *)(malloc( sizeof( struct data_table *) ));
     if( strcmp(currentTable, "") != 0 ){
       *singleTable = turnStringToTable( &fullString, currentTable );
@@ -99,8 +106,10 @@ struct data_table * readTables( int fd ){
       counter++;
     }
   }
+  (*db).DATATABLES = tables;
+  (*db).TABLENAMES = tablenames;
   unlock();
-  return tables;
+  return db;
 }
 
 struct data_table turnStringToTable( char ** fullString, char * tablename ){ // Assumes all the proper parts in string
@@ -167,7 +176,7 @@ struct data_table turnStringToTable( char ** fullString, char * tablename ){ // 
       while( dataRow ){
         char * dtValue = strsep(&dataRow, "|");
         if( strcmp(dtValue, "") != 0 ){
-          struct data_entry * dataEntry = (struct data_entry *)malloc(sizeof(struct data_entry *));
+          struct data_entry * dataEntry = (struct data_entry *)malloc(sizeof(struct data_entry) * 256);
           (*dataEntry).TYPE = *((*table).TYPES+counter);
           if( strcmp((*dataEntry).TYPE, "TEXT") == 0 ){
             (*dataEntry).TEXT_VAL = dtValue;
@@ -185,6 +194,8 @@ struct data_table turnStringToTable( char ** fullString, char * tablename ){ // 
       c++;
     }    
   }
+
+  (*table).VALUES = tableValues;
   
   return *table;
 }
