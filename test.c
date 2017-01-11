@@ -59,12 +59,12 @@ int main(){
   int fd = openFileAttempt("testfile");
   printf("File Opened:[%d]\n", fd);
 
-  struct database * db = readDatabase(fd);
-  int numOfTables = (*db).NUM_OF_TABLES;
+  struct database db = *readDatabase(fd);
+  int numOfTables = (db).NUM_OF_TABLES;
   printf("numOfTables[%d]\n", numOfTables);
   int i = 0;
   for(;i<numOfTables;i++){
-    struct data_table table = (*db).DATATABLES[i];
+    struct data_table table = (db).DATATABLES[i];
     printf("Table information for Table %d\n",i);
     printf("\tTableName:[%s]\n", table.TABLENAME);
     printf("\tFirst Table Header:[%s]\n", table.HEADERS[0]);

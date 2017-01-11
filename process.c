@@ -75,7 +75,7 @@ struct database * readDatabase( int fd ){
   struct stat buf;
   struct data_table * tables;
   char ** tablenames = (char **)malloc(sizeof(char *) * STND_SIZE);
-  struct database * db = (struct database *)malloc(sizeof (struct database) + STND_SIZE);
+  struct database * db = (struct database *)calloc(1, sizeof (struct database) + STND_SIZE);
   int err;
   lock();
   err = fstat( fd, &buf);
