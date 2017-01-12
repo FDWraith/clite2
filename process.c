@@ -38,6 +38,7 @@ void lock();
 void unlock();
 char * findStringPair( char ** originalString, char * firstDenom, char * secondDenom);
 struct data_table turnStringToTable(char ** fullString, char * tablename);
+char * turnTableToString( struct data_table table );
 
 void lock(){
   int semid;
@@ -208,5 +209,73 @@ char * findStringPair(char ** originalString, char * firstDenom, char * secondDe
   *strstr(result, secondDenom) = 0;
   *originalString = temp;
   return result;  
+}
+
+char * turnTableToString( struct data_table table ){
+  char * string = (char *)malloc( sizeof(table) + STND_SIZE);
+  char * tablename = table.TABLENAME;
+  char ** headers = table.HEADERS;
+  char ** types = table.TYPES;
+  struct data_entry ** values = table.VALUES;
+  int length = 0;
+  length += sprintf(string+length, "<TABLE:%s>", tablename);
+
+  int counter = 0;
+  length += sprintf(string+length, "<TABLE_INFO:%s>", tablename);
+  while( types[counter] ){
+    if( types[counter + 1]){
+      length += sprintf(string+length, "%s|", types[counter]);
+    }else{
+      length += sprintf(string+length, "%s", types[counter]);
+    }
+    counter++;
+  }
+  length += sprintf(string+length, "<TABLE_INFO_END:%s>", tablename);
+  
+  counter = 0;
+  length += sprintf(string+length, "<TABLE_HEADERS:%s>", tablename);
+  while( headers[counter] ){
+    if( headers[counter + 1]){
+      length += sprintf(string+length, "%s|", headers[counter]);
+    }else{
+      length += sprintf(string+length, "%s", headers[counter]);
+    }
+    counter++;
+  }
+  length += sprintf(string+length, "<TABLE_HEADERS_END:%s>", tablename);
+
+  counter = 0;
+  while( values[counter] ){
+    length += sprintf(string + length, "<TABLE_DATA:%s>", tablename);
+    struct data_entry * valueRow = values[counter];
+    int i = 0;
+    while( valueRow[i].TYPE ){
+      if( valueRow[i+1].TYPE ){
+        struct data_entry current = valueRow[i];
+        if( strcmp(current.TYPE, "TEXT") != 0){
+          length += sprintf(string+length, "%s|", current.TEXT_VAL);
+        }else if( strcmp( current.TYPE, "INTEGER") != 0){
+          length += sprintf(string+length, "%d|", current.INT_VAL);
+        }else{
+          printf("Someone done goofed. Type not fouund!\n");
+        }
+      }else{
+        struct data_entry current = valueRow[i];
+        if( strcmp(current.TYPE, "TEXT") != 0){
+          length += sprintf(string+length, "%s", current.TEXT_VAL);
+        }else if( strcmp( current.TYPE, "INTEGER") != 0 ){
+          length += sprintf(string+length, "%d", current.INT_VAL);
+        }else{
+          printf("Someone done goofed. Type not fouund!\n");
+        }
+      }
+      i++;
+    }
+    length += sprintf(string+length, "<TABLE_DATA_END:%s>", tablename);
+    counter++;
+  }
+
+  length += sprintf(string+length, "<TABLE_END:%s>", tablename);
+  return string;
 }
 
