@@ -252,18 +252,18 @@ char * turnTableToString( struct data_table table ){
     while( valueRow[i].TYPE ){
       if( valueRow[i+1].TYPE ){
         struct data_entry current = valueRow[i];
-        if( strcmp(current.TYPE, "TEXT") != 0){
+        if( strcmp(current.TYPE, "TEXT") == 0){
           length += sprintf(string+length, "%s|", current.TEXT_VAL);
-        }else if( strcmp( current.TYPE, "INTEGER") != 0){
+        }else if( strcmp( current.TYPE, "INTEGER") == 0){
           length += sprintf(string+length, "%d|", current.INT_VAL);
         }else{
           printf("Someone done goofed. Type not fouund!\n");
         }
       }else{
         struct data_entry current = valueRow[i];
-        if( strcmp(current.TYPE, "TEXT") != 0){
+        if( strcmp(current.TYPE, "TEXT") == 0){
           length += sprintf(string+length, "%s", current.TEXT_VAL);
-        }else if( strcmp( current.TYPE, "INTEGER") != 0 ){
+        }else if( strcmp( current.TYPE, "INTEGER") == 0 ){
           length += sprintf(string+length, "%d", current.INT_VAL);
         }else{
           printf("Someone done goofed. Type not fouund!\n");
