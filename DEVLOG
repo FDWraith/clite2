@@ -8,4 +8,6 @@ kevinZ -- 2017-01-10 11:27 PM
     Debugging process.c
     Managed to get a large portion of the reading portion working. Will be working on writing tomorrow
     readTables and openFileAttempt are still untested, although I will test them very soon.
-       
+kevinZ -- 2017-01-11 9:51 PM
+    Got DB Processing and File Locking Parts completed.
+    Minor bug with NUM_OF_TABLES in struct database. Not sure how to prevent the pointer from losing its value. Will have to look into it. I managed to circumvent it, but I would rather not do so in the future.
