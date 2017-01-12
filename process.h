@@ -18,8 +18,7 @@ struct database{
 };
 
 
-int openFileAttempt(char * filename);
-struct database * readDatabase(int fd);
+struct database * readDatabase(char * filename);
 void lock();
 void unlock();
 char * findStringPair( char ** originalString, char * firstDenom, char * secondDenom);

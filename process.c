@@ -32,8 +32,7 @@ struct database{
   struct data_table * DATATABLES;
 };
 
-int openFileAttempt(char * filename);
-struct database * readDatabase(int fd);
+struct database * readDatabase(char * filename);
 void lock();
 void unlock();
 char * findStringPair( char ** originalString, char * firstDenom, char * secondDenom);
@@ -72,13 +71,15 @@ int openFileAttempt( char * filename ){
   return *fd;
 }
 
-struct database * readDatabase( int fd ){
+struct database * readDatabase( char * filename ){
+  lock();
+  umask(0);
+  int fd = open(filename, O_CREAT | O_RDWR );
   struct stat buf;
   struct data_table * tables;
   char ** tablenames = (char **)malloc(sizeof(char *) * STND_SIZE);
   struct database * db = (struct database *)calloc(1, sizeof (struct database) + STND_SIZE);
   int err;
-  lock();
   err = fstat( fd, &buf);
   if( err < 0 ){
     printf("Something went wrong with fstat:%s\n", strerror(errno));
@@ -109,6 +110,7 @@ struct database * readDatabase( int fd ){
   }
   (*db).DATATABLES = tables;
   (*db).TABLENAMES = tablenames;
+  close(fd);
   unlock();
   return db;
 }

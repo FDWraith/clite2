@@ -56,10 +56,7 @@ int main(){
 
   printf("Testing openFileAttempt and readDatabase\n\n");
 
-  int fd = openFileAttempt("testfile");
-  printf("File Opened:[%d]\n", fd);
-
-  struct database db = *readDatabase(fd);
+  struct database db = *readDatabase("testfile");
   int numOfTables = (db).NUM_OF_TABLES;
   printf("numOfTables[%d]\n", numOfTables);
   int i = 0;
