@@ -24,3 +24,4 @@ void unlock();
 char * findStringPair( char ** originalString, char * firstDenom, char * secondDenom);
 struct data_table turnStringToTable(char ** fullString, char * tablename);
 char * turnTableToString( struct data_table table );
+void writeDatabase( struct database db, char * filename );

@@ -89,5 +89,13 @@ int main(){
 
   printf("FullString: [%s]\n", result);
 
+  printf("\nTesting Complete, Moving on\n");
+
+  printf("========================\n");
+
+  printf("Testing writeDatabase\n\n");
+
+  writeDatabase( db, "secondfile");
+  
   return 0;
 }

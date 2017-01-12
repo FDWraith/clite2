@@ -38,6 +38,8 @@ void unlock();
 char * findStringPair( char ** originalString, char * firstDenom, char * secondDenom);
 struct data_table turnStringToTable(char ** fullString, char * tablename);
 char * turnTableToString( struct data_table table );
+void writeDatabase( struct database, char * filename );
+
 
 void lock(){
   int semid;
@@ -59,16 +61,6 @@ void unlock(){
   sb.sem_flg = SEM_UNDO;
   sb.sem_op = 1;
   semop(semid, &sb, 1);
-}
-
-int openFileAttempt( char * filename ){
-  //int err;
-  int * fd = (int *)(malloc( sizeof(int) ));
-  lock();
-  umask(0);
-  *fd = open(filename, O_CREAT | O_RDWR);
-  unlock();
-  return *fd;
 }
 
 struct database * readDatabase( char * filename ){
@@ -281,3 +273,30 @@ char * turnTableToString( struct data_table table ){
   return string;
 }
 
+void writeDatabase( struct database db, char * filename ){
+  lock();
+  umask(0);
+  int fd = open(filename, O_CREAT | O_TRUNC | O_WRONLY , 0644);
+  int length = 0;
+  char * string = (char *)malloc( sizeof( db ) + STND_SIZE );
+  length += sprintf(string, "<DATABASE_INFO>");
+  int counter = 0;
+  while( db.TABLENAMES[counter] ){
+    if ( db.TABLENAMES[counter + 1] ) {
+      length += sprintf(string+length, "%s|", db.TABLENAMES[counter]);
+    }else{
+      length += sprintf(string+length, "%s!", db.TABLENAMES[counter]);
+    }
+    counter++;
+  }
+  length += sprintf(string+length, "%d<DATABASE_INFO_END>", counter );
+  counter = 0;
+  while( db.TABLENAMES[counter] ){
+    length += sprintf(string+length, "%s", turnTableToString(db.DATATABLES[counter]) );
+    counter++;
+  }
+
+  printf("Final String:[%s]\n", string);
+
+  write( fd, string, strlen(string));
+}
