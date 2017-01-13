@@ -19,8 +19,8 @@ int main(int argc, char * argv[]){
     printf("clite2 requires exactly one file parameter\n");
     exit(0);
   }
-  
-  int fd = open(argv[1], O_CREAT | O_RDWR);
+  char * filename = argv[1];
+  createFileIfNotExists( filename );
   // prints command prompt
   printf("> ");
   

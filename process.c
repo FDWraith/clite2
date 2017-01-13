@@ -39,7 +39,7 @@ char * findStringPair( char ** originalString, char * firstDenom, char * secondD
 struct data_table turnStringToTable(char ** fullString, char * tablename);
 char * turnTableToString( struct data_table table );
 void writeDatabase( struct database, char * filename );
-
+void createFileIfNotExists( char * filename );
 
 void lock(){
   int semid;
@@ -61,6 +61,16 @@ void unlock(){
   sb.sem_flg = SEM_UNDO;
   sb.sem_op = 1;
   semop(semid, &sb, 1);
+}
+
+void createFileIfNotExists( char * filename ){
+  lock();
+  umask(0000);
+  int fd = open( filename, O_CREAT | O_EXCL, 0644 );
+  if (fd > 0 ) {
+    close(fd);
+  }
+  unlock();
 }
 
 struct database * readDatabase( char * filename ){
