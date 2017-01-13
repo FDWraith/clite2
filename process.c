@@ -66,8 +66,10 @@ void unlock(){
 void createFileIfNotExists( char * filename ){
   lock();
   umask(0000);
-  int fd = open( filename, O_CREAT | O_EXCL, 0644 );
+  int fd = open( filename, O_CREAT | O_EXCL | O_WRONLY, 0644 );
   if (fd > 0 ) {
+    char string[STND_SIZE] = "<DATABASE_INFO>!0<DATABASE_INFO_END>";
+    write(fd, string, strlen(string));
     close(fd);
   }
   unlock();
@@ -97,14 +99,14 @@ struct database * readDatabase( char * filename ){
   char copy[256];
   strcpy( copy, dbInfo);
   (*db).NUM_OF_TABLES = atoi(copy);
-  printf("NUM_OF_TABLES:[%d]\n", (*db).NUM_OF_TABLES);
+  //printf("NUM_OF_TABLES:[%d]\n", (*db).NUM_OF_TABLES);
   tables = calloc((*db).NUM_OF_TABLES, sizeof(struct data_table) );
   int counter = 0;
   while( tableList ){
     char * currentTable = strsep( &tableList, "|");
-    tablenames[counter] = currentTable;
     struct data_table * singleTable = (struct data_table *)(malloc( sizeof( struct data_table *) ));
     if( strcmp(currentTable, "") != 0 ){
+      tablenames[counter] = currentTable;
       *singleTable = turnStringToTable( &fullString, currentTable );
       tables[counter] = *singleTable;
       counter++;
