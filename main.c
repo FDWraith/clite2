@@ -12,22 +12,26 @@
 #include <sys/stat.h>
 
 #include "process.h"
+#include "execute.h"
 
-int main(int argc, char * argv[]){
+int main(int argc, char *argv[]) {
+
   // checks for file parameter
   if (argc != 2) {
     printf("clite2 requires exactly one file parameter\n");
     exit(0);
   }
-  char * filename = argv[1];
-  createFileIfNotExists( filename );
+  
+  int fd = open(argv[1], O_CREAT | O_RDWR);
   // prints command prompt
   printf("> ");
   
   // 
   char s[1000];
   while(fgets(s, sizeof(s), stdin)) {
-    //s = format(s);
+    /*printf("%s", s);
+    if (strcmp ((char *) s[0], '.') == 0)*/
+    exec_dot(s);
     printf("> ");
   }
   
