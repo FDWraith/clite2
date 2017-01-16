@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 #include "process.h"
+#include "execute.h"
 
 int main(){
   printf("Beginning Test for Reading From File\n");
@@ -96,6 +97,18 @@ int main(){
   printf("Testing writeDatabase\n\n");
 
   writeDatabase( db, "secondfile");
+
+  printf("\nTesting Complete, Moving on\n");
+
+  printf("========================\n");
+
+  printf("Testing stripWhiteSpace\n");
+
+  char * string = (char *)malloc(sizeof(char) * 256);
+  strcpy(string, "   Three White to left, Two White to Right  ");
+  printf("String Before: [%s]\n", string);
+  char * returnV = stripWhiteSpace(&string);
+  printf("String Now: [%s]\n", string);
   
   return 0;
 }
