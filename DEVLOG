@@ -24,4 +24,4 @@ kevinZ -- 2017-01-16 11:09 PM
     CREATE TABLES is complete, but untested.
     Began work on SELECT, although I am still uncertain how to go about printing stuff out
 tinaL -- 2017-01-17 11:38 AM
-    Did some debugging and realized the strcmp issue was because of a newline. Working on a function to get rid of it.
+    Did some debugging and realized the strcmp issue was because of a trailing newline. Working on a function to get rid of it.
