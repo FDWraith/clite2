@@ -14,4 +14,9 @@ kevinZ -- 2017-01-11 9:51 PM
 kevinZ -- 2017-01-16 5:32 PM
     Began to work on creating tables for exec. Will probably work on the rest of the commands shortly.
     Create Table is still incomplete
-    New function: stripWhiteSpace, which removes trailing white space at the ends of a string. Useful for people like me, who like to put spaces in the least common of places, such as the ends. 
+    New function: stripWhiteSpace, which removes trailing white space at the ends of a string. Useful for people like me, who like to put spaces in the least common of places, such as the ends.
+kevinZ -- 2017-01-16 11:09 PM
+    Made some minor modifications here and there.
+    CREATE TABLES is complete, but untested.
+    Began work on SELECT, although I am still uncertain how to go about printing stuff out
+    
