@@ -85,7 +85,32 @@ void exec_shell_cmd( char * cmd, char * filename ) {
     stripWhiteSpace( &desirables );
     if( strcmp(desirables, "*")){
       //Print whole table? As soon as I find out which table it is.
-      
+      stripWhiteSpace( &cmd );
+      struct database * db = readDatabase(filename);
+      char ** listOfTables = (char **)malloc(sizeof(char *) * 20 + STND_SIZE );
+      int counter = 0;
+      while( strstr(cmd, ",") != 0){
+        char * tempString = strsep(&cmd, ",");
+        stripWhiteSpace(&tempString);
+        listOfTables[counter] = tempString;
+        counter++;
+      }
+      int numOfTables = counter;
+      int i = 0;
+      for( counter = 0; counter < numOfTables; counter++){
+        while( (*db).TABLENAMES[i] != NULL && strcmp(listOfTables[counter], (*db).TABLENAMES[i] ) != 0 ){
+          i++;
+        }
+        if( (*db).TABLENAMES[i] == NULL ){
+          printf("Table %s Not Found\n", listOfTables[counter] );
+          exit(0);
+        }else if( strcmp(listOfTables[counter], (*db).TABLENAMES[i] ) == 0){
+          //print out table.
+          //printTable( (*db).DATATABLES[i] );
+        }else{
+          printf("Table %s Does Not Match\n", listOfTables[counter] );
+        }
+      }
     }else{
       
     }
