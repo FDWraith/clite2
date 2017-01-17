@@ -146,10 +146,10 @@ struct data_table turnStringToTable( char ** fullString, char * tablename ){ // 
   sprintf(denom1, "<TABLE_DATA:%s>", tablename);
   sprintf(denom2, "<TABLE_DATA_END:%s>", tablename);
   
-  struct data_entry * * tableValues = (struct data_entry * *)malloc(sizeof(struct data_entry *) * STND_SIZE);
+  struct data_entry * * tableValues = (struct data_entry * *)calloc(1,sizeof(struct data_entry *) * STND_SIZE);
   
   int c = 0;
-  while( tableString != NULL && strcmp(tableString, "") != 0){
+  while( tableString != NULL && strcmp(tableString, "") != 0 && strstr(tableString, "<TABLE_DATA") != NULL){
     char * dataRow = findStringPair(&tableString, denom1, denom2);
     if( strcmp(dataRow, "") != 0 ){
       struct data_entry * valueRow = (struct data_entry *)malloc(sizeof(struct data_entry) * STND_SIZE);
