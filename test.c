@@ -4,6 +4,7 @@
 
 #include "process.h"
 #include "execute.h"
+#include "utils.h"
 
 int main(){
   printf("Beginning Test for Reading From File\n");
@@ -57,12 +58,12 @@ int main(){
 
   printf("Testing openFileAttempt and readDatabase\n\n");
 
-  struct database db = *readDatabase("testfile");
-  int numOfTables = (db).NUM_OF_TABLES;
-  printf("numOfTables[%d]\n", numOfTables);
+  struct database * db = readDatabase("testfile");
+  int * numOfTables = (*db).NUM_OF_TABLES;
+  printf("numOfTables[%d]\n", *numOfTables);
   int i = 0;
-  for(;i<numOfTables;i++){
-    struct data_table table = (db).DATATABLES[i];
+  for(;i<*numOfTables;i++){
+    struct data_table table = (*db).DATATABLES[i];
     if( table.TABLENAME != NULL ){
       printf("Table information for Table %d\n",i);
       printf("\tTableName:[%s]\n", table.TABLENAME);
@@ -96,7 +97,7 @@ int main(){
 
   printf("Testing writeDatabase\n\n");
 
-  writeDatabase( db, "secondfile");
+  writeDatabase( *db, "secondfile");
 
   printf("\nTesting Complete, Moving on\n");
 

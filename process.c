@@ -6,10 +6,9 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <sys/sem.h>
-#include <sys/ipc.h>
 #include <errno.h>
-#include <sys/stat.h>
+
+#include "utils.h"
 
 #define STND_SIZE 1000
 
@@ -27,41 +26,16 @@ struct data_table {
 };
 
 struct database{
-  int NUM_OF_TABLES;
+  int * NUM_OF_TABLES;
   char * * TABLENAMES;
   struct data_table * DATATABLES;
 };
 
 struct database * readDatabase(char * filename);
-void lock();
-void unlock();
-char * findStringPair( char ** originalString, char * firstDenom, char * secondDenom);
 struct data_table turnStringToTable(char ** fullString, char * tablename);
 char * turnTableToString( struct data_table table );
 void writeDatabase( struct database, char * filename );
 void createFileIfNotExists( char * filename );
-
-void lock(){
-  int semid;
-  int key = ftok("makefile", 55);
-  struct sembuf sb;
-  semid = semget( key, 1, 0 );
-  sb.sem_op = -1;
-  sb.sem_num = 1;
-  sb.sem_flg = SEM_UNDO;
-  semop(semid, &sb, 1);
-}
-
-void unlock(){
-  int semid;
-  int key = ftok("makefile", 55);
-  struct sembuf sb;
-  semid = semget( key, 1, 0 );
-  sb.sem_num = 1;
-  sb.sem_flg = SEM_UNDO;
-  sb.sem_op = 1;
-  semop(semid, &sb, 1);
-}
 
 void createFileIfNotExists( char * filename ){
   lock();
@@ -96,11 +70,11 @@ struct database * readDatabase( char * filename ){
   char * dbInfo = findStringPair(&fullString, "<DATABASE_INFO>", "<DATABASE_INFO_END>");
   char * tableList = strsep(&dbInfo, "!");
   printf("dbInfo:[%s]\n", dbInfo );
-  char copy[256];
-  strcpy( copy, dbInfo);
-  (*db).NUM_OF_TABLES = atoi(copy);
+  int * pt = (int *)malloc(sizeof(int));
+  *pt = atoi(dbInfo);
+  (*db).NUM_OF_TABLES = pt;
   //printf("NUM_OF_TABLES:[%d]\n", (*db).NUM_OF_TABLES);
-  tables = calloc((*db).NUM_OF_TABLES, sizeof(struct data_table) );
+  tables = calloc(*(*db).NUM_OF_TABLES, sizeof(struct data_table) );
   int counter = 0;
   while( tableList ){
     char * currentTable = strsep( &tableList, "|");
@@ -205,16 +179,6 @@ struct data_table turnStringToTable( char ** fullString, char * tablename ){ // 
   (*table).VALUES = tableValues;
   
   return *table;
-}
-
-char * findStringPair(char ** originalString, char * firstDenom, char * secondDenom ){
-  //printf("OriginalString:[%s]\n", *originalString);
-  // printf("First Denom:[%s]\n", firstDenom);
-  char * result = strstr(*originalString, firstDenom)+strlen(firstDenom);
-  char * temp = strstr(*originalString, secondDenom)+strlen(secondDenom);
-  *strstr(result, secondDenom) = 0;
-  *originalString = temp;
-  return result;  
 }
 
 char * turnTableToString( struct data_table table ){

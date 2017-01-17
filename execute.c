@@ -11,10 +11,9 @@
 #include <errno.h>
 #include <sys/stat.h>
 
+#include "utils.h"
 #include "process.h"
 #define STND_SIZE 1000;
-
-char * stripWhiteSpace(char ** originalString);
 
 void exec_dot(char * cmd) {
   if (strcmp(cmd, ".quit") == 0) {
@@ -23,8 +22,7 @@ void exec_dot(char * cmd) {
   }
 }
 
-
-void exec_shell_cmd( char * cmd ) {
+void exec_shell_cmd( char * cmd, char * filename ) {
   if( strstr(cmd, "CREATE TABLE") != NULL ){
     struct data_table * table = (struct data_table *)malloc( sizeof( struct data_table ) );
     cmd = strstr(cmd, "CREATE TABLE") + strlen("CREATE TABLE");
@@ -42,8 +40,10 @@ void exec_shell_cmd( char * cmd ) {
     (*table).TABLENAME = tablename;
     counter = 0;
     char * valueString = findStringPair( &cmd, "(", ")");
+    stripWhiteSpace(&valueString);
     while( valueString ){
       char * tempString = strsep(&valueString, ",");
+      stripWhiteSpace(&tempString);
       if( strchr( tempString, ' ') == NULL){
         printf("CLite Error: Missing Type\n");
         exit(0);
@@ -70,16 +70,20 @@ void exec_shell_cmd( char * cmd ) {
         counter++;
       }
     }
+    struct database * db = readDatabase(filename);
+    //NUM_OF_TABLES is not working, so I have to compute length manually
+    counter = 0;
+    while( (*db).TABLENAMES[counter] != NULL ){
+      counter++;
+    }
+    (*db).TABLENAMES[counter] = tablename;
+    (*db).DATATABLES[counter] = *table;
+    (*db).NUM_OF_TABLES++;
+    writeDatabase( *db, filename );
+  }else if( strstr(cmd, "SELECT")){
+    char * desirables = findStringPair( &cmd, "SELECT", "FROM" );
+    stripWhiteSpace( &desirables );
+    
   }
 }
 
-
-char * stripWhiteSpace( char ** originalString ){
-  while( (**originalString) == ' ' ){
-    (*originalString)++;
-  }
-  while( (*originalString)[strlen(*originalString)-1] == ' '){
-    (*originalString)[strlen(*originalString)-1] = 0;
-  }
-  return (*originalString);
-}

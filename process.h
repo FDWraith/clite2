@@ -13,7 +13,7 @@ struct data_table {
 
 struct database{
   char * * TABLENAMES;
-  int NUM_OF_TABLES;
+  int * NUM_OF_TABLES;
   struct data_table * DATATABLES;
 };
 
