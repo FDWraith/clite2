@@ -80,9 +80,16 @@ void exec_shell_cmd( char * cmd, char * filename ) {
     (*db).DATATABLES[counter] = *table;
     (*db).NUM_OF_TABLES++;
     writeDatabase( *db, filename );
-  }else if( strstr(cmd, "SELECT")){
+  }else if( strstr(cmd, "SELECT") != NULL){
     char * desirables = findStringPair( &cmd, "SELECT", "FROM" );
     stripWhiteSpace( &desirables );
+    if( strcmp(desirables, "*")){
+      //Print whole table? As soon as I find out which table it is.
+      
+    }else{
+      
+    }
+  }else if( strstr(cmd, "DELETE" ) != NULL ){
     
   }
 }
