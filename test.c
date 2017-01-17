@@ -70,12 +70,14 @@ int main(){
       printf("\tFirst Table Header:[%s]\n", table.HEADERS[0]);
       printf("\tFirst Table Type:[%s]\n", table.TYPES[0]);
       struct data_entry * firstRow = table.VALUES[0];
-      struct data_entry firstEntry = firstRow[0];
-      struct data_entry secondEntry = firstRow[1];
-      printf("\tFirst Table Entry:[%s]\n", firstEntry.TEXT_VAL);
-      printf("\tSecond Table Header:[%s]\n", table.HEADERS[1]);
-      printf("\tSecond Table Type:[%s]\n", table.TYPES[1]);
-      printf("\tSecond Table Entry:[%s]\n", secondEntry.TEXT_VAL);
+      if( firstRow != 0 ){
+        struct data_entry firstEntry = firstRow[0];
+        struct data_entry secondEntry = firstRow[1];
+        printf("\tFirst Table Entry:[%s]\n", firstEntry.TEXT_VAL);
+        printf("\tSecond Table Header:[%s]\n", table.HEADERS[1]);
+        printf("\tSecond Table Type:[%s]\n", table.TYPES[1]);
+        printf("\tSecond Table Entry:[%s]\n", secondEntry.TEXT_VAL);
+      }
     }else{
       break;
     }
