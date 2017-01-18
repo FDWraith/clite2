@@ -14,7 +14,7 @@
 #include "utils.h"
 #include "process.h"
 
-#define STND_SIZE 1000);
+#define STND_SIZE 1000
 
 void exec_dot(char * cmd) {
   if (strcmp(cmd, ".quit") == 0) {
