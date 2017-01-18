@@ -11,6 +11,10 @@ kevinZ -- 2017-01-10 11:27 PM
 kevinZ -- 2017-01-11 9:51 PM
     Got DB Processing and File Locking Parts completed.
     Minor bug with NUM_OF_TABLES in struct database. Not sure how to prevent the pointer from losing its value. Will have to look into it. I managed to circumvent it, but I would rather not do so in the future.
+tinaL -- 2017-01-12 ?:?? PM
+    Basic shell (main.c) is up and working. 
+tinaL -- 2017-01-13 ?:?? PM
+    Started working on dot commands. Running into some weird problems with quit and strcmp. 
 kevinZ -- 2017-01-16 5:32 PM
     Began to work on creating tables for exec. Will probably work on the rest of the commands shortly.
     Create Table is still incomplete
@@ -22,4 +26,6 @@ kevinZ -- 2017-01-16 11:09 PM
 kevinZ -- 2017-01-17 11:59 PM
     SELECT * FROM tableNames works
     The rest of SELECT is not done yet
-    
+tinaL -- 2017-01-17 11:38 AM
+    Did some debugging and realized the strcmp issue was because of a trailing newline. Working on a function to get rid of it.
+

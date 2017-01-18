@@ -17,7 +17,6 @@ struct database{
   struct data_table * DATATABLES;
 };
 
-
 struct database * readDatabase(char * filename);
 void lock();
 void unlock();

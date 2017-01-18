@@ -13,7 +13,8 @@
 
 #include "utils.h"
 #include "process.h"
-#define STND_SIZE 1000;
+
+#define STND_SIZE 1000);
 
 void exec_dot(char * cmd) {
   if (strcmp(cmd, ".quit") == 0) {
@@ -96,22 +97,9 @@ void exec_shell_cmd( char * cmd, char * filename ) {
         counter++;
       }
       int numOfTables = counter;
-      int i = 0;
-      for( counter = 0; counter < numOfTables; counter++){
-        while( (*db).TABLENAMES[i] != NULL && strcmp(listOfTables[counter], (*db).TABLENAMES[i] ) != 0 ){
-          i++;
-        }
-        if( (*db).TABLENAMES[i] == NULL ){
-          printf("Table %s Not Found\n", listOfTables[counter] );
-          exit(0);
-        }else if( strcmp(listOfTables[counter], (*db).TABLENAMES[i] ) == 0){
-          //print out table.
-          //printTable( (*db).DATATABLES[i] );
-        }else{
-          printf("Table %s Does Not Match\n", listOfTables[counter] );
-        }
-      }
+      printDatabase( db, listOfTables, numOfTables );
     }else{
+      //specific params that we are looking for T_T
       
     }
   }else if( strstr(cmd, "DELETE" ) != NULL ){

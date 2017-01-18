@@ -26,8 +26,8 @@ struct data_table {
 };
 
 struct database{
-  int * NUM_OF_TABLES;
   char * * TABLENAMES;
+  int * NUM_OF_TABLES;
   struct data_table * DATATABLES;
 };
 
