@@ -4,11 +4,12 @@
  *Else:
  *  INT_VAL is populated
  */
-struct data_entry {
+typedef struct data_entry {
   char * TYPE;
   int INT_VAL;
   char * TEXT_VAL;
-};
+} data_entry;
+
 
 /*Struct for a single table
  *  TABLENAME : Name of the table. String.
@@ -16,12 +17,12 @@ struct data_entry {
  *  TYPES : Type for each column of the table. List of Strings
  *  VALUES : Tangible data. Organized in rows, with each row containing data_entries. List of List of data_entry 
  */
-struct data_table {
+typedef struct data_table {
   char * TABLENAME;
   char * * HEADERS;
   char * * TYPES;
   struct data_entry * * VALUES;
-};
+} data_table;
 
 
 /*Struct for entire database in the file
@@ -29,11 +30,11 @@ struct data_table {
  *  NUM_OF_TABLES (CURRENTLY NOT WORKING) : Number of tables in the database
  *  DATATABLES : List of tables by their structs. 
  */
-struct database{
+typedef struct database{
   char * * TABLENAMES;
   int * NUM_OF_TABLES;
   struct data_table * DATATABLES;
-};
+} database;
 
 /*Reads the database, given proper formatting ( see the file DBDenom ),  from the given file
  *@params 
