@@ -12,14 +12,30 @@
 #include <sys/stat.h>
 
 #include "utils.h"
-#include "process.h"
-
-#define STND_SIZE 1000
 
 void exec_dot(char * cmd) {
-  if (strcmp(cmd, ".quit") == 0) {
-    //printf("true");  // quit won't work without this print statement for some reason...
+  
+  char * help = "this is the help menu";
+  
+  // quit and exit
+  if (strcmp(cmd, ".quit") == 0 || strcmp(cmd, ".exit") == 0) {
     exit(0);
+  }
+  
+  // help
+  else if (strcmp(cmd, ".help") == 0) {
+    printf("%s\n", help);
+  }
+  
+  // print
+  else if (strstr(cmd, ".print")) {
+    /*stripWhiteSpace(&cmd);
+    printf("%s\n", cmd);*/
+  }
+  
+  // invalid command
+  else {
+    printf("invalid command\n");
   }
 }
 
