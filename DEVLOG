@@ -23,9 +23,11 @@ kevinZ -- 2017-01-16 11:09 PM
     Made some minor modifications here and there.
     CREATE TABLES is complete, but untested.
     Began work on SELECT, although I am still uncertain how to go about printing stuff out
-kevinZ -- 2017-01-17 11:59 PM
+kevinZ -- 2017-01-17 11:59 AM
     SELECT * FROM tableNames works
     The rest of SELECT is not done yet
 tinaL -- 2017-01-17 11:38 AM
     Did some debugging and realized the strcmp issue was because of a trailing newline. Working on a function to get rid of it.
-
+kevinZ -- 2017-01-17 9:15 PM
+    Added some comments to header files for information
+    
