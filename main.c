@@ -14,6 +14,7 @@
 #include "process.h"
 #include "execute.h"
 
+
 int main(int argc, char *argv[]) {
 
   // checks for file parameter
@@ -24,14 +25,21 @@ int main(int argc, char *argv[]) {
   
   int fd = open(argv[1], O_CREAT | O_RDWR);
   // prints command prompt
+  printf("Welcome to clite2!\nEnter \".help\" for instructions.\nEnd all SQL commands with a \";\".\n");
   printf("> ");
   
-  // 
-  char s[1000];
+  // processing inputted commands
+  char s[1000];  // storing command in string s
   while(fgets(s, sizeof(s), stdin)) {
-    /*printf("%s", s);
-    if (strcmp ((char *) s[0], '.') == 0)*/
-    exec_dot(s);
+    // gets rid of trailing newline
+    s[strlen(s)-1] = 0;
+    
+    // handles . commands
+    if (strstr(s, ".")) {
+      exec_dot(s);
+    }
+    
+    // prints command prompt after commands are inputted
     printf("> ");
   }
   
