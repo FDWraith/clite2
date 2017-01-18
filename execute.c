@@ -90,7 +90,7 @@ void exec_shell_cmd( char * cmd, char * filename ) {
       struct database * db = readDatabase(filename);
       char ** listOfTables = (char **)malloc(sizeof(char *) * 20 + STND_SIZE );
       int counter = 0;
-      while( strstr(cmd, ",") != 0){
+      while( cmd && strcmp( cmd, "" ) != 0 ) {
         char * tempString = strsep(&cmd, ",");
         stripWhiteSpace(&tempString);
         listOfTables[counter] = tempString;
@@ -100,7 +100,35 @@ void exec_shell_cmd( char * cmd, char * filename ) {
       printDatabase( db, listOfTables, numOfTables );
     }else{
       //specific params that we are looking for T_T
+      stripWhiteSpace(&cmd);
+      struct database * db = readDatabase(filename);
+      char ** listOfTables = (char **)malloc(sizeof(char *) * 20 + STND_SIZE );
+      int counter = 0;
+      while( cmd && strcmp( cmd, "" ) != 0 ) {
+        char * tempString = strsep(&cmd, ",");
+        stripWhiteSpace(&tempString);
+        listOfTables[counter] = tempString;
+        counter++;
+      }
+      int numOfTables = counter;
+      struct data_table * tableList = (struct data_table *)malloc( sizeof(struct data_table) * 50 );
+      for(counter = 0; counter < numOfTables; counter++ ){
+        int j = 0;
+        while( (*db).TABLENAMES[j] ){
+          if( strcmp( (*db).TABLENAMES[j] , listOfTables[counter] ) == 0 ){
+            tableList[counter] = (*db).DATATABLES[j];
+            break;
+          }else{
+            j++;
+          }
+        }
+      }
+
+      char ** sumHeaders;
       
+      while( desirables ) {
+        
+      }
     }
   }else if( strstr(cmd, "DELETE" ) != NULL ){
     
