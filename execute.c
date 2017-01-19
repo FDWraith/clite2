@@ -12,6 +12,7 @@
 #include <sys/stat.h>
 
 #include "utils.h"
+#include "process.h"
 
 void exec_dot(char * cmd) {
   
@@ -140,11 +141,44 @@ void exec_shell_cmd( char * cmd, char * filename ) {
         }
       }
 
-      char ** sumHeaders;
-      
-      while( desirables ) {
-        
+      char ** sumHeaders = (char **)malloc(sizeof(char *) * STND_SIZE);
+      counter = 0;
+      int i;
+      for(i = 0;i<numOfTables;i++){
+        while( (*tableList).HEADERS[i] ){
+          char * string = (char *)malloc(sizeof(char) * STND_SIZE );
+          sprintf(string, "%s.%s", (*tableList).TABLENAME, (*tableList).HEADERS[i]);
+          sumHeaders[counter] = string;
+          counter++;
+        }
       }
+      int lengthOfSum = counter;
+      counter = 0;
+      char ** desirableHeaders = (char **)malloc(sizeof(char *) * STND_SIZE);
+      while( desirables ) {
+        char * desirable = strsep(&desirables, ",");
+        stripWhiteSpace(&desirable);
+        int checker = 0;
+        for( i=0; i<lengthOfSum; i++ ){
+          if( strstr(sumHeaders[i], desirable) != NULL){
+            if( checker == 0 ){
+              desirableHeaders[counter] = sumHeaders[i];
+              counter++;
+              checker = 1;
+            }else{
+              printf("Please specify the table to which %s belongs\n", desirable);
+              exit(0);
+            }
+          }
+        }
+        if( checker == 0 ){
+          printf("Header %s cannot be found\n", desirable);
+          exit(0);
+        }
+      }
+
+      int lengthOfDesirables = counter;
+      
     }
   }else if( strstr(cmd, "DELETE" ) != NULL ){
     
