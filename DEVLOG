@@ -32,3 +32,5 @@ kevinZ -- 2017-01-17 9:15 PM
     Added some comments to header files for information
 tinaL -- 2017-01-18 11:30 AM
     Fixed newline problem, implemented basic . commands (quit, exit, help)
+tinaL -- 2017-01-19 11:43 AM
+    .print is almost done, started . commands with ON|OFF
