@@ -30,14 +30,31 @@ void exec_dot(char * cmd) {
   
   // print
   else if (strstr(cmd, ".print")) {
-    /*stripWhiteSpace(&cmd);
-    printf("%s\n", cmd);*/
+    if (strstr(cmd, "\"")) {
+      stripWhiteSpace(&cmd);
+      printf("did it work? %s\n", cmd);
+    }
+    strsep(&cmd, " ");
+    printf("%s\n", cmd);
+  }
+  
+  // echo
+  else if (strstr(cmd, ".echo")) {
+    strsep(&cmd, " ");
+    if (strcmp(cmd, "on") == 0)
+      return 1;
+    else if (strcmp(cmd, "off") == 0)
+      return 0;
   }
   
   // invalid command
   else {
     printf("invalid command\n");
   }
+}
+
+int exec_mode(char * cmd) {
+  return 0;
 }
 
 void exec_shell_cmd( char * cmd, char * filename ) {

@@ -14,6 +14,9 @@
 #include "process.h"
 #include "execute.h"
 
+struct modes {
+  int echo;  
+};
 
 int main(int argc, char *argv[]) {
 
@@ -34,11 +37,16 @@ int main(int argc, char *argv[]) {
     // gets rid of trailing newline
     s[strlen(s)-1] = 0;
     
+    // handles modes
+    if (ststr(s, ".") && (strstr(s, "ON") || strstr(s, "OFF")))
+      exec_mode(s);
+      
     // handles . commands
-    if (strstr(s, ".")) {
+    else if (strstr(s, ".")) {
       exec_dot(s);
     }
     
+    if (echo) printf("%s\n", s);
     // prints command prompt after commands are inputted
     printf("> ");
   }
