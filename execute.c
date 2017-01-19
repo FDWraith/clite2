@@ -53,7 +53,7 @@ void exec_dot(char * cmd) {
 }
 
 int exec_mode(char * cmd) {
-  
+  return 0;
 }
 
 void exec_shell_cmd( char * cmd, char * filename ) {
