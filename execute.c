@@ -195,7 +195,39 @@ void exec_shell_cmd( char * cmd, char * filename ) {
       }
 
       int lengthOfDesirables = counter;
-      
+      struct data_table * newTables = (struct data_table *)malloc( sizeof(struct data_table) * 20);
+      for( counter=0; counter < numOfTables; counter++){
+        struct data_table * newTable = (struct data_table *)malloc( sizeof(struct data_table) );
+        int j = 0;
+        for( i=0; i<lengthOfDesirables; i++ ){
+          char * desirable = desirableHeaders[i];
+          char * tblname = strsep(&desirable,".");
+          if( strcmp( tblname, tableList[counter].TABLENAME ) == 0 ){
+            (*newTable).TABLENAME = tblname;
+            (*newTable).HEADERS[j] = desirable;//Desirable is currently the rest of the header :D
+            int k = 0;
+            while( tableList[counter].HEADERS[k] ){
+              if( strcmp( tableList[counter].HEADERS[k], desirable ) == 0 ){
+                (*newTable).TYPES[j] = tableList[counter].TYPES[k];
+                int l;
+                while( &tableList[counter].VALUES[l][k] != NULL ){
+                  (*newTable).VALUES[l][j] = tableList[counter].VALUES[l][k];
+                  l++;
+                }
+                break;
+              }else{
+                k++;
+              }
+            }            
+          }          
+        }
+        newTables[counter] = *newTable;
+      }
+      struct database * newDB = (struct database *)malloc( sizeof(struct database) );
+      (*newDB).TABLENAMES = listOfTables;
+      (*newDB).DATATABLES = newTables;
+      (*newDB).NUM_OF_TABLES = &numOfTables;
+      printDatabase( newDB, listOfTables, numOfTables );//Finally complete
     }
   }else if( strstr(cmd, "DELETE" ) != NULL ){
     
