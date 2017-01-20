@@ -12,9 +12,8 @@
 #include <sys/stat.h>
 
 #include "utils.h"
-#include "process.h"
 
-void exec_dot(char * cmd) {
+int exec_dot(char * cmd) {
   
   char * help = "this is the help menu";
   
@@ -31,6 +30,7 @@ void exec_dot(char * cmd) {
   // print
   else if (strstr(cmd, ".print")) {
     if (strstr(cmd, "\"")) {
+      printf("before %s\n", cmd);
       stripWhiteSpace(&cmd);
       printf("did it work? %s\n", cmd);
     }
@@ -38,23 +38,28 @@ void exec_dot(char * cmd) {
     printf("%s\n", cmd);
   }
   
-  // echo
-  else if (strstr(cmd, ".echo")) {
-    strsep(&cmd, " ");
-    if (strcmp(cmd, "on") == 0)
-      return 1;
-    else if (strcmp(cmd, "off") == 0)
-      return 0;
-  }
-  
   // invalid command
   else {
     printf("invalid command\n");
   }
+  
+  return 0;
 }
 
-int exec_mode(char * cmd) {
-  return 0;
+int * exec_mode(char * cmd) {
+  // { echo, x, x }
+  static int modes[] = {0, 0, 0};
+  
+  // echo
+  if (strstr(cmd, ".echo")) {
+    strsep(&cmd, " ");
+    if (strcmp(cmd, "on") == 0)
+      modes[0] = 1;
+    else if (strcmp(cmd, "off") == 0)
+      modes[0] = 0;
+  }
+  
+  return modes;
 }
 
 void exec_shell_cmd( char * cmd, char * filename ) {

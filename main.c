@@ -14,9 +14,12 @@
 #include "process.h"
 #include "execute.h"
 
-struct modes {
-  int echo;  
-};
+// mode variables
+int echo;
+
+void updateModes(int modes[]) {
+  echo = modes[0];
+}
 
 int main(int argc, char *argv[]) {
 
@@ -26,7 +29,9 @@ int main(int argc, char *argv[]) {
     exit(0);
   }
   
+  // creates new database file
   int fd = open(argv[1], O_CREAT | O_RDWR);
+  
   // prints command prompt
   printf("Welcome to clite2!\nEnter \".help\" for instructions.\nEnd all SQL commands with a \";\".\n");
   printf("> ");
@@ -38,11 +43,14 @@ int main(int argc, char *argv[]) {
     s[strlen(s)-1] = 0;
     
     // handles modes
-    if (ststr(s, ".") && (strstr(s, "ON") || strstr(s, "OFF")))
-      exec_mode(s);
+    /*if (strstr(s, ".") && (strstr(s, "ON") || strstr(s, "OFF"))) {
+      int update[];
+      memcpy(exec_mode(s), update, 12);
+      updateModes(update);
+    }*/
       
     // handles . commands
-    else if (strstr(s, ".")) {
+    if (strstr(s, ".")) {
       exec_dot(s);
     }
     
