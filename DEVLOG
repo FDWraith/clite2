@@ -34,3 +34,8 @@ tinaL -- 2017-01-18 11:30 AM
     Fixed newline problem, implemented basic . commands (quit, exit, help)
 tinaL -- 2017-01-19 11:43 AM
     .print is almost done, started . commands with ON|OFF
+kevinZ -- 2017-01-20 11:57 AM
+    Finished SELECT finally!
+    Not going to do WHERE.
+    Gonna work on some additional parts to make shell working
+    Also gonna have to test SELECT ... 
