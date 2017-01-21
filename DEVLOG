@@ -38,4 +38,8 @@ kevinZ -- 2017-01-20 11:57 AM
     Finished SELECT finally!
     Not going to do WHERE.
     Gonna work on some additional parts to make shell working
-    Also gonna have to test SELECT ... 
+    Also gonna have to test SELECT ...
+kevinZ -- 2017-01-21 4:17 PM
+    CREATE TABLE works perfectly
+    SELECT * seems to work, although I cannot be certain until Tina finishes printTable
+    
