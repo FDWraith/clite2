@@ -219,7 +219,7 @@ char * turnTableToString( struct data_table table ){
     length += sprintf(string + length, "<TABLE_DATA:%s>", tablename);
     struct data_entry * valueRow = values[counter];
     int i = 0;
-    while( valueRow[i].TYPE ){
+    while( &valueRow[i] != NULL  && valueRow[i].TYPE ){
       if( valueRow[i+1].TYPE ){
         struct data_entry current = valueRow[i];
         if( strcmp(current.TYPE, "TEXT") == 0){
@@ -272,7 +272,7 @@ void writeDatabase( struct database db, char * filename ){
     counter++;
   }
 
-  printf("Final String:[%s]\n", string);
+  //printf("Final String:[%s]\n", string);
 
   write( fd, string, strlen(string));
 }

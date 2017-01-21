@@ -12,6 +12,9 @@
 #include <sys/stat.h>
 
 #include "utils.h"
+#include "process.h"
+
+#define STND_SIZE 1000
 
 int exec_dot(char * cmd) {
   
@@ -64,11 +67,9 @@ int * exec_mode(char * cmd) {
 
 void exec_shell_cmd( char * cmd, char * filename ) {
   if( strstr(cmd, "CREATE TABLE") != NULL ){
-    struct data_table * table = (struct data_table *)malloc( sizeof( struct data_table ) );
+    struct data_table * table = (struct data_table *)calloc(1, sizeof( struct data_table ) );
     cmd = strstr(cmd, "CREATE TABLE") + strlen("CREATE TABLE");
-    while( *cmd == ' ' ){
-      cmd++;
-    }
+    stripWhiteSpace(&cmd);
     char tablename[256];
     int counter = 0;
     while( *cmd != ' '){
@@ -81,6 +82,8 @@ void exec_shell_cmd( char * cmd, char * filename ) {
     counter = 0;
     char * valueString = findStringPair( &cmd, "(", ")");
     stripWhiteSpace(&valueString);
+    char ** headers = (char ** )malloc( sizeof(char *) * STND_SIZE);
+    char ** types = (char **)malloc( sizeof( char *) * STND_SIZE);
     while( valueString ){
       char * tempString = strsep(&valueString, ",");
       stripWhiteSpace(&tempString);
@@ -88,21 +91,16 @@ void exec_shell_cmd( char * cmd, char * filename ) {
         printf("CLite Error: Missing Type\n");
         exit(0);
       }else{
-        (*table).HEADERS[counter]  = strsep(&tempString, " ");
-        while( *tempString == ' ' ){
-          tempString++;
-        }
+        headers[counter] = strsep(&tempString, " ");
+        //printf("what's here? [%s]\n", (*table).HEADERS );
+          //(*table).HEADERS[counter] = strsep(&tempString, " ");// Error here. 
+        stripWhiteSpace(&tempString);
         char type[256];
-        int i = 0;
-        while( *tempString != ' '){
-          type[i] = *tempString;
-          tempString++;
-          i++;
-        }
+        strcpy( type, tempString);
         if( strcmp( type, "TEXT" )) {
-          (*table).TYPES[counter] = type;
+          types[counter] = type;
         }else if( strcmp( type, "INTEGER" ) ){
-          (*table).TYPES[counter] = type;
+          types[counter] = type;
         }else{
           printf("CLite Error: Type Not Found\n");
           exit(0);
@@ -110,6 +108,9 @@ void exec_shell_cmd( char * cmd, char * filename ) {
         counter++;
       }
     }
+    (*table).HEADERS = headers;
+    (*table).TYPES = types;
+    (*table).VALUES = (struct data_entry **)calloc(STND_SIZE ,sizeof(data_entry) * STND_SIZE );
     struct database * db = readDatabase(filename);
     //NUM_OF_TABLES is not working, so I have to compute length manually
     counter = 0;

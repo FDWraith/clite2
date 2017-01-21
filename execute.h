@@ -1,2 +1,2 @@
 void exec_dot(char * cmd);
-char * stripWhiteSpace( char ** originalString );
+void exec_shell_cmd( char * cmd, char * filename );

@@ -105,13 +105,22 @@ int main(){
 
   printf("========================\n");
 
-  printf("Testing stripWhiteSpace\n");
+  printf("Testing stripWhiteSpace\n\n");
 
   char * string = (char *)malloc(sizeof(char) * 256);
   strcpy(string, "   Three White to left, Two White to Right  ");
   printf("String Before: [%s]\n", string);
   char * returnV = stripWhiteSpace(&string);
   printf("String Now: [%s]\n", string);
+
+  printf("\nTesting Complete, Moving on\n");
+
+  printf("========================\n");
+
+  printf("Testing Table Creation\n\n");
+  
+  strcpy(string, "CREATE TABLE blank ( riperino TEXT )");
+  exec_shell_cmd( string, "secondfile");
   
   return 0;
 }
