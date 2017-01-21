@@ -275,4 +275,5 @@ void writeDatabase( struct database db, char * filename ){
   printf("Final String:[%s]\n", string);
 
   write( fd, string, strlen(string));
+  unlock();
 }
