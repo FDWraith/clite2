@@ -272,7 +272,7 @@ void writeDatabase( struct database db, char * filename ){
     counter++;
   }
 
-  //printf("Final String:[%s]\n", string);
+  printf("Final String:[%s]\n", string);
 
   write( fd, string, strlen(string));
 }
