@@ -120,7 +120,11 @@ int main(){
   printf("Testing Table Creation\n\n");
   
   strcpy(string, "CREATE TABLE blank ( riperino TEXT )");
+  printf("testString:[%s]\n", string);
   exec_shell_cmd( string, "secondfile");
+  strcpy(string, "CREATE TABLE wow ( rip TEXT, id INTEGER )");
+  printf("secondTestString:[%s]\n", string);
+  exec_shell_cmd(string, "secondfile");
   
   return 0;
 }
