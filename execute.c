@@ -125,7 +125,7 @@ void exec_shell_cmd( char * cmd, char * filename ) {
   }else if( strstr(cmd, "SELECT") != NULL){
     char * desirables = findStringPair( &cmd, "SELECT", "FROM" );
     stripWhiteSpace( &desirables );
-    if( strcmp(desirables, "*")){
+    if( strcmp(desirables, "*") == 0){
       //Print whole table? As soon as I find out which table it is.
       stripWhiteSpace( &cmd );
       struct database * db = readDatabase(filename);
