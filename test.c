@@ -125,6 +125,15 @@ int main(){
   strcpy(string, "CREATE TABLE wow ( rip TEXT, id INTEGER )");
   printf("secondTestString:[%s]\n", string);
   exec_shell_cmd(string, "secondfile");
-  
+
+  printf("\nTesting Complete, Moving on\n");
+
+  printf("========================\n");
+
+  printf("Testing Table Selection\n\n");
+
+  strcpy(string, "SELECT * FROM soemthing" );
+  printf("testString:[%s]\n", string);
+  exec_shell_cmd( string, "secondfile");
   return 0;
 }

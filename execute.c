@@ -66,6 +66,7 @@ int * exec_mode(char * cmd) {
 }
 
 void exec_shell_cmd( char * cmd, char * filename ) {
+  stripWhiteSpace(&cmd);
   if( strstr(cmd, "CREATE TABLE") != NULL ){
     struct data_table * table = (struct data_table *)calloc(1, sizeof( struct data_table ) );
     cmd = strstr(cmd, "CREATE TABLE") + strlen("CREATE TABLE");
