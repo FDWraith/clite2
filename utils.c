@@ -32,6 +32,21 @@ char * stripWhiteSpace( char ** originalString ){
   return (*originalString);
 }
 
+char * removeChar (char ** originalString, char c) {
+  char newStr[strlen(*originalString)-1];
+  int i = 0;
+  int n = 0;
+  for(; i < strlen(*originalString) - 1; i++) {
+    if ((*originalString)[i] != c) {
+      newStr[n] = (*originalString)[i];
+      n++;
+    }
+  }
+  newStr[n] = 0;
+  strcpy(*originalString, newStr);
+  return (*originalString);
+}
+
 void lock(){
   int semid;
   int key = ftok("makefile", 55);
