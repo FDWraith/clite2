@@ -19,9 +19,9 @@ void printDatabase( struct database * db, char ** listOfTableNames, int numOfTab
 void printTable( struct data_table * tb);
 
 char * stripWhiteSpace( char ** originalString ){
-  char whiteSpace[10] = { ' ', '\n'};
+  char whiteSpace[10] = { ' ', '\n', ';'};
   int i = 0;
-  for(;i<2;i++){
+  for(;i<3;i++){
     while( (**originalString) == whiteSpace[i] ){
       (*originalString)++;
     }
