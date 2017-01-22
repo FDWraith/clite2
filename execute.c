@@ -33,9 +33,7 @@ int exec_dot(char * cmd) {
   // print
   else if (strstr(cmd, ".print")) {
     if (strstr(cmd, "\"")) {
-      printf("before %s\n", cmd);
-      stripWhiteSpace(&cmd);
-      printf("did it work? %s\n", cmd);
+      removeChar(&cmd, '\"');
     }
     strsep(&cmd, " ");
     printf("%s\n", cmd);
