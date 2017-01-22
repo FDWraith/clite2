@@ -13,6 +13,7 @@
 
 #include "process.h"
 #include "execute.h"
+#include "utils.h"
 
 // mode variables
 int echo;
@@ -30,7 +31,9 @@ int main(int argc, char *argv[]) {
   }
   
   // creates new database file
-  int fd = open(argv[1], O_CREAT | O_RDWR);
+  //int fd = open(argv[1], O_CREAT | O_RDWR);
+  createFileIfNotExists(argv[1]);
+  
   
   // prints command prompt
   printf("Welcome to clite2!\nEnter \".help\" for instructions.\nEnd all SQL commands with a \";\".\n");
@@ -52,8 +55,9 @@ int main(int argc, char *argv[]) {
     // handles . commands
     if (strstr(s, ".")) {
       exec_dot(s);
+    }else{
+      exec_shell_cmd(s, argv[1]);
     }
-    
     if (echo) printf("%s\n", s);
     // prints command prompt after commands are inputted
     printf("> ");
