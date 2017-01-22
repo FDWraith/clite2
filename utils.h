@@ -9,6 +9,8 @@ extern struct data_table; // See process.h for details.
  */
 char * stripWhiteSpace( char ** originalString );
 
+char * removeChar (char ** originalString, char c);
+
 /*Pairs firstDenom with secondDenom in a given originalString, and returns everything in between. The originalString is modified as a result.
  *@params
  *  originalString : the address of the string you are searching through for.
