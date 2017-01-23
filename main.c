@@ -15,13 +15,6 @@
 #include "execute.h"
 #include "utils.h"
 
-// mode variables
-int echo;
-
-void updateModes(int modes[]) {
-  echo = modes[0];
-}
-
 int main(int argc, char *argv[]) {
 
   // checks for file parameter
@@ -55,7 +48,8 @@ int main(int argc, char *argv[]) {
     // handles . commands
     if (strstr(s, ".")) {
       exec_dot(s);
-    }else{
+    }
+    else{
       exec_shell_cmd(s, argv[1]);
     }
     if (echo) printf("%s\n", s);
