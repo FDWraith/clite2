@@ -47,22 +47,6 @@ int exec_dot(char * cmd) {
   return 0;
 }
 
-int * exec_mode(char * cmd) {
-  // { echo, x, x }
-  static int modes[] = {0, 0, 0};
-  
-  // echo
-  if (strstr(cmd, ".echo")) {
-    strsep(&cmd, " ");
-    if (strcmp(cmd, "on") == 0)
-      modes[0] = 1;
-    else if (strcmp(cmd, "off") == 0)
-      modes[0] = 0;
-  }
-  
-  return modes;
-}
-
 void exec_shell_cmd( char * cmd, char * filename ) {
   stripWhiteSpace(&cmd);
   if( strstr(cmd, "CREATE TABLE") != NULL ){
