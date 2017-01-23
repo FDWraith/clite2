@@ -52,7 +52,7 @@ int main(int argc, char *argv[]) {
     else{
       exec_shell_cmd(s, argv[1]);
     }
-    if (echo) printf("%s\n", s);
+    //if (echo) printf("%s\n", s);
     // prints command prompt after commands are inputted
     printf("> ");
   }
