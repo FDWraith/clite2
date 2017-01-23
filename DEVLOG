@@ -42,4 +42,6 @@ kevinZ -- 2017-01-20 11:57 AM
 kevinZ -- 2017-01-21 4:17 PM
     CREATE TABLE works perfectly
     SELECT * seems to work, although I cannot be certain until Tina finishes printTable
-    
+tinaL -- 2017-01-23 1:40 AM
+    Finally got print to work, realized that ON|OFF commands won't be necessary for our implementation.
+    .tables, DELETE, and INSERT are coming along. Somehow broke CREATE while working on those three things... won't push for now so that we have at least one working version of CREATE.
