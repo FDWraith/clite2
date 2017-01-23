@@ -95,6 +95,7 @@ void exec_shell_cmd( char * cmd, char * filename ) {
     (*table).TYPES = types;
     (*table).VALUES = (struct data_entry **)calloc(STND_SIZE ,sizeof(data_entry) * STND_SIZE );
     struct database * db = readDatabase(filename);
+    lock();
     //NUM_OF_TABLES is not working, so I have to compute length manually
     counter = 0;
     while( (*db).TABLENAMES[counter] != NULL ){
@@ -103,6 +104,7 @@ void exec_shell_cmd( char * cmd, char * filename ) {
     (*db).TABLENAMES[counter] = tablename;
     (*db).DATATABLES[counter] = *table;
     (*db).NUM_OF_TABLES++;
+    unlock();
     writeDatabase( *db, filename );
   }else if( strstr(cmd, "SELECT") != NULL){
     char * desirables = findStringPair( &cmd, "SELECT", "FROM" );
