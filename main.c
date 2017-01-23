@@ -10,6 +10,7 @@
 #include <sys/ipc.h>
 #include <errno.h>
 #include <sys/stat.h>
+#include <sys/wait.h>
 
 #include "process.h"
 #include "execute.h"
@@ -47,14 +48,34 @@ int main(int argc, char *argv[]) {
       
     // handles . commands
     if (strstr(s, ".")) {
-      exec_dot(s);
+      if( strstr(s, ".exit" ) != NULL || strstr(s, ".quit") != NULL ){
+        exit(0);
+      }else{
+        int status;
+        int f = fork();
+        if( f == 0 ){
+          exec_dot(s);
+          exit(0);
+        }else{
+          wait(&status);
+          printf("> ");
+        }
+      }
     }
     else{
-      exec_shell_cmd(s, argv[1]);
+      int status;
+      int f = fork();
+      if (f == 0){
+        exec_shell_cmd(s, argv[1]);
+        exit(0);
+      }else{
+        wait(&status);
+        printf("> ");
+      }
     }
+    
     //if (echo) printf("%s\n", s);
     // prints command prompt after commands are inputted
-    printf("> ");
   }
   
   return 0;
