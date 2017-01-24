@@ -80,7 +80,7 @@ void exec_shell_cmd( char * cmd, char * filename ) {
         stripWhiteSpace(&tempString);
         char * type = (char *)malloc(sizeof(char) * 256);
         strcpy( type, tempString);
-        printf("type:[%s]\n", type);
+        //printf("type:[%s]\n", type);
         if( strcmp( type, "TEXT" ) == 0) {
           types[counter] = type;
         }else if( strcmp( type, "INTEGER" ) == 0){
@@ -89,7 +89,7 @@ void exec_shell_cmd( char * cmd, char * filename ) {
           printf("CLite Error: Type Not Found\n");
           exit(0);
         }
-        printf("types[counter] < [%s]\n", types[counter]);
+        //printf("types[counter] < [%s]\n", types[counter]);
         counter++;
       }
     }
