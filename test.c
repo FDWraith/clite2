@@ -144,5 +144,15 @@ int main(){
   strcpy(string, "SELECT H1, Whut FROM soemthing, TABLENAME");
   printf("testString:[%s]\n", string);
   exec_shell_cmd(string, "secondfile");
+
+  printf("\nTesting Complete, Moving on\n");
+
+  printf("========================\n");
+
+  printf("Testing Table Deletion\n\n");
+
+  strcpy(string, "DELETE soemthing");
+  printf("testString:[%s]\n", string);
+  exec_shell_cmd( string, "secondfile" );
   return 0;
 }

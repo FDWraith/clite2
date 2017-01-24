@@ -248,46 +248,44 @@ void exec_shell_cmd( char * cmd, char * filename ) {
       printDatabase( newDB, listOfTables, numOfTables );//Finally complete
     }
   }else if( strstr(cmd, "DELETE" ) != NULL ){
-    struct database * db = readDatabase(filename);
-    //strsep(&cmd, " ");
-    printf("cmd: %s\n", cmd); // get rid of "DELETE"
-    //strsep(&cmd, " ");
-    printf("cmd: %s\n", cmd); // get rid of "FROM"
+    cmd = strstr(cmd, "DELETE") + strlen("DELETE");
+    stripWhiteSpace(&cmd);
+    char ** listOfTables = (char **)malloc(sizeof(char *) * 20 + STND_SIZE );
+    int counter = 0;
+    while( cmd && strcmp( cmd, "" ) != 0 ) {
+        char * tempString = strsep(&cmd, ",");
+        //printf("tempString:[%s]\n", tempString);
+        stripWhiteSpace(&tempString);
+        listOfTables[counter] = tempString;
+        counter++;
+    }
     
+    int numOfTables = counter;
+    
+    struct database * db = readDatabase(filename);    
     struct data_table * tables = (*db).DATATABLES;
     struct data_table * newTables = (struct data_table *)malloc( sizeof(struct data_table) * 20);  //updated tables
+    char * * newTableNames = (char * *)malloc( sizeof(char *) * STND_SIZE);
     
-    int t = 0;
-    while( (*db).TABLENAMES[t] != NULL ){
-      t++;
-    }
-    
-    // populating new, updated list newTables
-    int i;
-    int j = 0;
-    for(i = 0; i < t; i++) {
-      struct data_table * newTable = (struct data_table *)malloc( sizeof(struct data_table) );
-      if (strcmp(cmd, (tables[i]).TABLENAME) != 0) {
-        newTable = &(tables[i]);
-        newTables[j] = *newTable;
-        j++;
+    int i = 0;
+    for(; i< numOfTables; i++ ){
+      char * removeTable = listOfTables[i];
+      
+      // populating new, updated list newTables
+      counter = 0;
+      int j = 0;
+      while( (*db).TABLENAMES[counter] ){
+        struct data_table * newTable = (struct data_table *)malloc( sizeof(struct data_table) );
+        if (strcmp( removeTable, (*db).TABLENAMES[counter] ) != 0) {
+          *newTable = tables[counter];
+          newTables[j] = *newTable;
+          newTableNames[j] = (*db).TABLENAMES[counter];
+          j++;
+        }
+        counter++;
       }
-      i++;
-    }
-    
-    char ** tableNames = (*db).TABLENAMES;
-    char ** newTableNames = (char **)malloc(sizeof(char *) * STND_SIZE);
-    
-    i = 0;
-    j = 0;
-    while (tableNames[i]) {
-      if (strcmp(cmd, tableNames[i]) != 0) {
-        newTableNames[j] = tableNames[i];
-        j++;
-      }
-      i++;
-    }
-    
+      
+    }    
     // updating database struct
     (*db).DATATABLES = newTables;
     (*db).TABLENAMES = newTableNames;
