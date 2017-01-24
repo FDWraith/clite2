@@ -45,4 +45,5 @@
 2. Currently, it is very easy to read the database information directly from the file. This is intentional, as it allows a person to understand whether something worked or not. If we were to expand this project outside of beta, then the file information will likely be encrypted, or something akin to that.
 3. ```WHERE```, which is a core feature of sqlite3, has not been implemented here. If we had additional time, we would have done it, but it's a very difficult feature to implement. 
 4. Several of sqlite3's ```.help``` menu features are not implemented as well. 
+5. Multi-line command is not implemented either.
 
