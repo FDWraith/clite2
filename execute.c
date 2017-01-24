@@ -185,6 +185,7 @@ void exec_shell_cmd( char * cmd, char * filename ) {
           exit(0);
         }
       }
+      
       int lengthOfDesirables = counter;
       struct data_table * newTables = (struct data_table *)malloc( sizeof(struct data_table) * 20);
       for( counter = 0; counter < numOfTables; counter++){
@@ -204,12 +205,14 @@ void exec_shell_cmd( char * cmd, char * filename ) {
             while( tableList[counter].HEADERS[k] ){
               if( strcmp( tableList[counter].HEADERS[k], desirable ) == 0 ){
                 newTypes[j] = tableList[counter].TYPES[k];
-                int l;
+                int l = 0;
                 while( &tableList[counter].VALUES[l][k] != NULL ){
                   if( newValues[l] == NULL ){
                     struct data_entry * valueRow = (struct data_entry *)malloc(sizeof(struct data_entry) * STND_SIZE);
                     newValues[l] = valueRow;
                   }
+                  printf("l:[%d], j:[%d], k:[%d]\n", l, j, k);
+                  printf("checking if VALUES[l] exists: [%p]\n", &tableList[counter].VALUES[l][k] );
                   newValues[l][j] = tableList[counter].VALUES[l][k];
                   l++;
                 }
@@ -217,8 +220,9 @@ void exec_shell_cmd( char * cmd, char * filename ) {
               }else{
                 k++;
               }
-            }            
-          }          
+            }
+            j++;
+          }
         }
         (*newTable).HEADERS = newHeaders;
         (*newTable).TYPES = newTypes;
