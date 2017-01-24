@@ -48,4 +48,4 @@ void printDatabase( struct database * db, char ** listOfTableNames, int numOfTab
  *@params
  *  tb : the table
  */
-void printTable( struct data_table * tb );
+void printTable( struct data_table tb );

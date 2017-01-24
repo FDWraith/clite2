@@ -135,5 +135,14 @@ int main(){
   strcpy(string, "SELECT * FROM soemthing" );
   printf("testString:[%s]\n", string);
   exec_shell_cmd( string, "secondfile");
+  strcpy(string, "SELECT H1 FROM soemthing" );
+  printf("testString:[%s]\n", string);
+  exec_shell_cmd(string, "secondfile");
+  strcpy(string, "SELECT H1, H2 FROM soemthing");
+  printf("testString:[%s]\n", string);
+  exec_shell_cmd(string, "secondfile");
+  strcpy(string, "SELECT H1, LOL FROM soemthing, TABLENAME");
+  printf("testString:[%s]\n", string);
+  exec_shell_cmd(string, "secondfile");
   return 0;
 }

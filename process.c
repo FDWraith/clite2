@@ -69,7 +69,7 @@ struct database * readDatabase( char * filename ){
   }
   char * dbInfo = findStringPair(&fullString, "<DATABASE_INFO>", "<DATABASE_INFO_END>");
   char * tableList = strsep(&dbInfo, "!");
-  printf("dbInfo:[%s]\n", dbInfo );
+  //printf("dbInfo:[%s]\n", dbInfo );
   int * pt = (int *)malloc(sizeof(int));
   *pt = atoi(dbInfo);
   (*db).NUM_OF_TABLES = pt;
@@ -159,6 +159,7 @@ struct data_table turnStringToTable( char ** fullString, char * tablename ){ // 
         if( strcmp(dtValue, "") != 0 ){
           struct data_entry * dataEntry = (struct data_entry *)malloc(sizeof(struct data_entry) * 256);
           (*dataEntry).TYPE = *((*table).TYPES+counter);
+          //printf("DATA ENTRY TYPE: [%s]\n", (*dataEntry).TYPE);
           if( strcmp((*dataEntry).TYPE, "TEXT") == 0 ){
             (*dataEntry).TEXT_VAL = dtValue;
           }else if( strcmp((*dataEntry).TYPE, "INTEGER") == 0 ){
