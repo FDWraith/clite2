@@ -276,8 +276,8 @@ void writeDatabase( struct database db, char * filename ){
     length += sprintf(string+length, "%s", turnTableToString(db.DATATABLES[counter]) );
     counter++;
   }
-
-  printf("Final String:[%s]\n", string);
+  
+  //printf("Final String:[%s]\n", string);
 
   write( fd, string, strlen(string));
   unlock();

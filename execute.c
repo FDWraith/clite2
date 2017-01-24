@@ -325,8 +325,8 @@ void exec_shell_cmd( char * cmd, char * filename ) {
     }
     values[i] = 0;
     
-    printf("values[0]: %s\n", values[0]);
-    printf("values[1]: %s\n", values[1]);
+    //printf("values[0]: %s\n", values[0]);
+    //printf("values[1]: %s\n", values[1]);
     
     struct data_table * tables = (*db).DATATABLES;
     struct data_table * table = (struct data_table *)malloc( sizeof(struct data_table) );
@@ -336,7 +336,7 @@ void exec_shell_cmd( char * cmd, char * filename ) {
     while( (*db).TABLENAMES[n] != NULL ){
       n++;
     }
-    printf("number of tables: %d\n", n);
+    //printf("number of tables: %d\n", n);
     
     for(i = 0; i < n; i++) {
       if (strcmp(tableName, tables[i].TABLENAME) == 0) {
