@@ -150,14 +150,18 @@ void exec_shell_cmd( char * cmd, char * filename ) {
         }
       }
       char ** sumHeaders = (char **)malloc(sizeof(char *) * STND_SIZE);
+      int i = 0;
       counter = 0;
-      int i;
-      for(i = 0;i<numOfTables;i++){
-        while( (*tableList).HEADERS[counter] ){
+      //printf("numOfTables[%d]\n", numOfTables);
+      for(;i<numOfTables;i++){
+        int j = 0;
+        while( tableList[i].HEADERS[j] ){
+          //printf("tableList[i].TABLENAME: %s\n", tableList[i].TABLENAME);
           char * string = (char *)malloc(sizeof(char) * STND_SIZE );
-          sprintf(string, "%s.%s", (*tableList).TABLENAME, (*tableList).HEADERS[counter]);
+          sprintf(string, "%s.%s", tableList[i].TABLENAME, tableList[i].HEADERS[j]);
           sumHeaders[counter] = string;
           counter++;
+          j++;
         }
       }
 
@@ -169,9 +173,12 @@ void exec_shell_cmd( char * cmd, char * filename ) {
         stripWhiteSpace(&desirable);
         int checker = 0;
         for( i=0; i<lengthOfSum; i++ ){
+          //printf("checker: [%s]\n", sumHeaders[i]);
           if( strstr(sumHeaders[i], desirable) != NULL){
             if( checker == 0 ){
-              desirableHeaders[counter] = sumHeaders[i];
+              char * desirableHeader = (char *)malloc(sizeof(char) * STND_SIZE);
+              strcpy(desirableHeader, sumHeaders[i]);
+              desirableHeaders[counter] = desirableHeader;              
               counter++;
               checker = 1;
             }else{
@@ -195,7 +202,9 @@ void exec_shell_cmd( char * cmd, char * filename ) {
         struct data_entry * * newValues = (struct data_entry * * )malloc( sizeof( struct data_entry) * STND_SIZE * STND_SIZE);
         int j = 0;
         for( i=0; i<lengthOfDesirables; i++ ){
-          char * desirable = desirableHeaders[i];
+          char * desirable = (char *)malloc(sizeof(char) * STND_SIZE);
+          strcpy(desirable, desirableHeaders[i]);
+          //printf("desirableHeader [%s]\n", desirable);
           char * tblname = strsep(&desirable,".");
           if( strcmp( tblname, tableList[counter].TABLENAME ) == 0 ){
             (*newTable).TABLENAME = tblname;
@@ -206,13 +215,13 @@ void exec_shell_cmd( char * cmd, char * filename ) {
               if( strcmp( tableList[counter].HEADERS[k], desirable ) == 0 ){
                 newTypes[j] = tableList[counter].TYPES[k];
                 int l = 0;
-                while( &tableList[counter].VALUES[l][k] != NULL ){
+                while( tableList[counter].VALUES != NULL && tableList[counter].VALUES[l] != NULL){
                   if( newValues[l] == NULL ){
                     struct data_entry * valueRow = (struct data_entry *)malloc(sizeof(struct data_entry) * STND_SIZE);
                     newValues[l] = valueRow;
                   }
-                  printf("l:[%d], j:[%d], k:[%d]\n", l, j, k);
-                  printf("checking if VALUES[l] exists: [%p]\n", &tableList[counter].VALUES[l][k] );
+                  //printf("l:[%d], j:[%d], k:[%d]\n", l, j, k);
+                  //printf("checking if VALUES[l] exists: [%p]\n", &tableList[counter].VALUES[l][k] ); 
                   newValues[l][j] = tableList[counter].VALUES[l][k];
                   l++;
                 }
