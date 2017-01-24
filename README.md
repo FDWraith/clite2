@@ -17,9 +17,8 @@
    - Dot Commands ( . )
 
      - ```.help``` lists all the dot commands, as well as any information regarding those commands
-
      - ```.tables``` lists all of the tables, by TABLENAME
-
+     - ```.print``` Prints literal string. 
      - ```.quit``` and ```.exit``` will exit the program.
    - Shell Commands 
      - ```CREATE TABLE``` is a useful command that allows the use to create tables in the database. 
@@ -45,4 +44,5 @@
 1. We have not handled all the possible points in which our code may break. Some are handled, for example trying ```SELECT * FROM *```, but others may cause our code to function weirdly. All the commands displayed on this page work as intended, but if you attempt special cases, then things may not work. Please do not intentionally break our code, as the database file may end up corrupt as a result ( unlikely, but still a possibility ).
 2. Currently, it is very easy to read the database information directly from the file. This is intentional, as it allows a person to understand whether something worked or not. If we were to expand this project outside of beta, then the file information will likely be encrypted, or something akin to that.
 3. ```WHERE```, which is a core feature of sqlite3, has not been implemented here. If we had additional time, we would have done it, but it's a very difficult feature to implement. 
+4. Several of sqlite3's ```.help``` menu features are not implemented as well. 
 
