@@ -336,7 +336,7 @@ void exec_shell_cmd( char * cmd, char * filename ) {
     while( (*db).TABLENAMES[n] != NULL ){
       n++;
     }
-    printf("number of tables: %d\n", n);
+    //printf("number of tables: %d\n", n);
     
     for(i = 0; i < n; i++) {
       if (strcmp(tableName, tables[i].TABLENAME) == 0) {
@@ -351,7 +351,7 @@ void exec_shell_cmd( char * cmd, char * filename ) {
     struct data_entry ** deList = (struct data_entry **)malloc (sizeof(struct data_entry *) * 10);
     deList = table->VALUES;
     int row = 0;
-    while (deList[i]) {
+    while (deList[row]) {
       row++;
     }
     
