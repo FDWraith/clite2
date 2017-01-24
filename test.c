@@ -151,7 +151,7 @@ int main(){
 
   printf("Testing Table Deletion\n\n");
 
-  strcpy(string, "DELETE soemthing");
+  strcpy(string, "DELETE blank");
   printf("testString:[%s]\n", string);
   exec_shell_cmd( string, "secondfile" );
   return 0;
