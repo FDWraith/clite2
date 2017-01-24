@@ -39,15 +39,8 @@ int main(int argc, char *argv[]) {
     // gets rid of trailing newline
     s[strlen(s)-1] = 0;
     
-    // handles modes
-    /*if (strstr(s, ".") && (strstr(s, "ON") || strstr(s, "OFF"))) {
-      int update[];
-      memcpy(exec_mode(s), update, 12);
-      updateModes(update);
-    }*/
-      
     // handles . commands
-    if (strstr(s, ".")) {
+    if (strstr(s, ".") && (strstr(s, "tables")) == NULL) {
       if( strstr(s, ".exit" ) != NULL || strstr(s, ".quit") != NULL ){
         exit(0);
       }else{
@@ -73,9 +66,6 @@ int main(int argc, char *argv[]) {
         printf("> ");
       }
     }
-    
-    //if (echo) printf("%s\n", s);
-    // prints command prompt after commands are inputted
   }
   
   return 0;

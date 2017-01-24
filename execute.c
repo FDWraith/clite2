@@ -250,5 +250,16 @@ void exec_shell_cmd( char * cmd, char * filename ) {
   }else if( strstr(cmd, "DELETE" ) != NULL ){
     
   }
+  
+  // .tables command
+  else if (strcmp(cmd, ".tables") == 0) {
+    struct database * db = readDatabase(filename);
+    char ** tables = (*db).TABLENAMES;
+    int i = 0;
+    while (tables[i]) {
+      printf("%s\n", tables[i]);
+      i++;
+    }
+  }
 }
 
