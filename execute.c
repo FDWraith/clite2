@@ -78,16 +78,18 @@ void exec_shell_cmd( char * cmd, char * filename ) {
         //printf("what's here? [%s]\n", (*table).HEADERS );
           //(*table).HEADERS[counter] = strsep(&tempString, " ");// Error here. 
         stripWhiteSpace(&tempString);
-        char type[256];
+        char * type = (char *)malloc(sizeof(char) * 256);
         strcpy( type, tempString);
-        if( strcmp( type, "TEXT" )) {
+        printf("type:[%s]\n", type);
+        if( strcmp( type, "TEXT" ) == 0) {
           types[counter] = type;
-        }else if( strcmp( type, "INTEGER" ) ){
+        }else if( strcmp( type, "INTEGER" ) == 0){
           types[counter] = type;
         }else{
           printf("CLite Error: Type Not Found\n");
           exit(0);
         }
+        printf("types[counter] < [%s]\n", types[counter]);
         counter++;
       }
     }
