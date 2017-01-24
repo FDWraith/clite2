@@ -10,6 +10,7 @@
 #include <sys/ipc.h>
 #include <errno.h>
 #include <sys/stat.h>
+#include <sys/wait.h>
 
 #include "process.h"
 #include "execute.h"
@@ -38,23 +39,33 @@ int main(int argc, char *argv[]) {
     // gets rid of trailing newline
     s[strlen(s)-1] = 0;
     
-    // handles modes
-    /*if (strstr(s, ".") && (strstr(s, "ON") || strstr(s, "OFF"))) {
-      int update[];
-      memcpy(exec_mode(s), update, 12);
-      updateModes(update);
-    }*/
-      
     // handles . commands
-    if (strstr(s, ".")) {
-      exec_dot(s);
+    if (strstr(s, ".") && (strstr(s, "tables")) == NULL) {
+      if( strstr(s, ".exit" ) != NULL || strstr(s, ".quit") != NULL ){
+        exit(0);
+      }else{
+        int status;
+        int f = fork();
+        if( f == 0 ){
+          exec_dot(s);
+          exit(0);
+        }else{
+          wait(&status);
+          printf("> ");
+        }
+      }
     }
     else{
-      exec_shell_cmd(s, argv[1]);
+      int status;
+      int f = fork();
+      if (f == 0){
+        exec_shell_cmd(s, argv[1]);
+        exit(0);
+      }else{
+        wait(&status);
+        printf("> ");
+      }
     }
-    if (echo) printf("%s\n", s);
-    // prints command prompt after commands are inputted
-    printf("> ");
   }
   
   return 0;

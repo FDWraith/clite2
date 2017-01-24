@@ -78,16 +78,18 @@ void exec_shell_cmd( char * cmd, char * filename ) {
         //printf("what's here? [%s]\n", (*table).HEADERS );
           //(*table).HEADERS[counter] = strsep(&tempString, " ");// Error here. 
         stripWhiteSpace(&tempString);
-        char type[256];
+        char * type = (char *)malloc(sizeof(char) * 256);
         strcpy( type, tempString);
-        if( strcmp( type, "TEXT" )) {
+        printf("type:[%s]\n", type);
+        if( strcmp( type, "TEXT" ) == 0) {
           types[counter] = type;
-        }else if( strcmp( type, "INTEGER" ) ){
+        }else if( strcmp( type, "INTEGER" ) == 0){
           types[counter] = type;
         }else{
           printf("CLite Error: Type Not Found\n");
           exit(0);
         }
+        printf("types[counter] < [%s]\n", types[counter]);
         counter++;
       }
     }
@@ -95,6 +97,7 @@ void exec_shell_cmd( char * cmd, char * filename ) {
     (*table).TYPES = types;
     (*table).VALUES = (struct data_entry **)calloc(STND_SIZE ,sizeof(data_entry) * STND_SIZE );
     struct database * db = readDatabase(filename);
+    lock();
     //NUM_OF_TABLES is not working, so I have to compute length manually
     counter = 0;
     while( (*db).TABLENAMES[counter] != NULL ){
@@ -103,6 +106,7 @@ void exec_shell_cmd( char * cmd, char * filename ) {
     (*db).TABLENAMES[counter] = tablename;
     (*db).DATATABLES[counter] = *table;
     (*db).NUM_OF_TABLES++;
+    unlock();
     writeDatabase( *db, filename );
   }else if( strstr(cmd, "SELECT") != NULL){
     char * desirables = findStringPair( &cmd, "SELECT", "FROM" );
@@ -133,6 +137,7 @@ void exec_shell_cmd( char * cmd, char * filename ) {
         listOfTables[counter] = tempString;
         counter++;
       }
+
       int numOfTables = counter;
       struct data_table * tableList = (struct data_table *)malloc( sizeof(struct data_table) * 50 );
       for(counter = 0; counter < numOfTables; counter++ ){
@@ -146,18 +151,22 @@ void exec_shell_cmd( char * cmd, char * filename ) {
           }
         }
       }
-
       char ** sumHeaders = (char **)malloc(sizeof(char *) * STND_SIZE);
+      int i = 0;
       counter = 0;
-      int i;
-      for(i = 0;i<numOfTables;i++){
-        while( (*tableList).HEADERS[i] ){
+      //printf("numOfTables[%d]\n", numOfTables);
+      for(;i<numOfTables;i++){
+        int j = 0;
+        while( tableList[i].HEADERS[j] ){
+          //printf("tableList[i].TABLENAME: %s\n", tableList[i].TABLENAME);
           char * string = (char *)malloc(sizeof(char) * STND_SIZE );
-          sprintf(string, "%s.%s", (*tableList).TABLENAME, (*tableList).HEADERS[i]);
+          sprintf(string, "%s.%s", tableList[i].TABLENAME, tableList[i].HEADERS[j]);
           sumHeaders[counter] = string;
           counter++;
+          j++;
         }
       }
+
       int lengthOfSum = counter;
       counter = 0;
       char ** desirableHeaders = (char **)malloc(sizeof(char *) * STND_SIZE);
@@ -166,9 +175,12 @@ void exec_shell_cmd( char * cmd, char * filename ) {
         stripWhiteSpace(&desirable);
         int checker = 0;
         for( i=0; i<lengthOfSum; i++ ){
+          //printf("checker: [%s]\n", sumHeaders[i]);
           if( strstr(sumHeaders[i], desirable) != NULL){
             if( checker == 0 ){
-              desirableHeaders[counter] = sumHeaders[i];
+              char * desirableHeader = (char *)malloc(sizeof(char) * STND_SIZE);
+              strcpy(desirableHeader, sumHeaders[i]);
+              desirableHeaders[counter] = desirableHeader;              
               counter++;
               checker = 1;
             }else{
@@ -182,36 +194,53 @@ void exec_shell_cmd( char * cmd, char * filename ) {
           exit(0);
         }
       }
-
+      
       int lengthOfDesirables = counter;
       struct data_table * newTables = (struct data_table *)malloc( sizeof(struct data_table) * 20);
-      for( counter=0; counter < numOfTables; counter++){
+      for( counter = 0; counter < numOfTables; counter++){
         struct data_table * newTable = (struct data_table *)malloc( sizeof(struct data_table) );
+        char * * newHeaders = (char * *)malloc( sizeof( char * ) * STND_SIZE);
+        char * * newTypes = (char * *)malloc( sizeof(char *) * STND_SIZE);
+        struct data_entry * * newValues = (struct data_entry * * )malloc( sizeof( struct data_entry) * STND_SIZE * STND_SIZE);
         int j = 0;
         for( i=0; i<lengthOfDesirables; i++ ){
-          char * desirable = desirableHeaders[i];
+          char * desirable = (char *)malloc(sizeof(char) * STND_SIZE);
+          strcpy(desirable, desirableHeaders[i]);
+          //printf("desirableHeader [%s]\n", desirable);
           char * tblname = strsep(&desirable,".");
           if( strcmp( tblname, tableList[counter].TABLENAME ) == 0 ){
             (*newTable).TABLENAME = tblname;
-            (*newTable).HEADERS[j] = desirable;//Desirable is currently the rest of the header :D
+            //printf("desirable [%s]\n", desirable);
+            newHeaders[j] = desirable;//Desirable is currently the rest of the header :D
             int k = 0;
             while( tableList[counter].HEADERS[k] ){
               if( strcmp( tableList[counter].HEADERS[k], desirable ) == 0 ){
-                (*newTable).TYPES[j] = tableList[counter].TYPES[k];
-                int l;
-                while( &tableList[counter].VALUES[l][k] != NULL ){
-                  (*newTable).VALUES[l][j] = tableList[counter].VALUES[l][k];
+                newTypes[j] = tableList[counter].TYPES[k];
+                int l = 0;
+                while( tableList[counter].VALUES != NULL && tableList[counter].VALUES[l] != NULL){
+                  if( newValues[l] == NULL ){
+                    struct data_entry * valueRow = (struct data_entry *)malloc(sizeof(struct data_entry) * STND_SIZE);
+                    newValues[l] = valueRow;
+                  }
+                  //printf("l:[%d], j:[%d], k:[%d]\n", l, j, k);
+                  //printf("checking if VALUES[l] exists: [%p]\n", &tableList[counter].VALUES[l][k] ); 
+                  newValues[l][j] = tableList[counter].VALUES[l][k];
                   l++;
                 }
                 break;
               }else{
                 k++;
               }
-            }            
-          }          
+            }
+            j++;
+          }
         }
+        (*newTable).HEADERS = newHeaders;
+        (*newTable).TYPES = newTypes;
+        (*newTable).VALUES = newValues;
         newTables[counter] = *newTable;
       }
+     
       struct database * newDB = (struct database *)malloc( sizeof(struct database) );
       (*newDB).TABLENAMES = listOfTables;
       (*newDB).DATATABLES = newTables;
@@ -219,7 +248,59 @@ void exec_shell_cmd( char * cmd, char * filename ) {
       printDatabase( newDB, listOfTables, numOfTables );//Finally complete
     }
   }else if( strstr(cmd, "DELETE" ) != NULL ){
+    cmd = strstr(cmd, "DELETE") + strlen("DELETE");
+    stripWhiteSpace(&cmd);
+    char ** listOfTables = (char **)malloc(sizeof(char *) * 20 + STND_SIZE );
+    int counter = 0;
+    while( cmd && strcmp( cmd, "" ) != 0 ) {
+        char * tempString = strsep(&cmd, ",");
+        //printf("tempString:[%s]\n", tempString);
+        stripWhiteSpace(&tempString);
+        listOfTables[counter] = tempString;
+        counter++;
+    }
     
+    int numOfTables = counter;
+    
+    struct database * db = readDatabase(filename);    
+    struct data_table * tables = (*db).DATATABLES;
+    struct data_table * newTables = (struct data_table *)malloc( sizeof(struct data_table) * 20);  //updated tables
+    char * * newTableNames = (char * *)malloc( sizeof(char *) * STND_SIZE);
+    
+    int i = 0;
+    for(; i< numOfTables; i++ ){
+      char * removeTable = listOfTables[i];
+      
+      // populating new, updated list newTables
+      counter = 0;
+      int j = 0;
+      while( (*db).TABLENAMES[counter] ){
+        struct data_table * newTable = (struct data_table *)malloc( sizeof(struct data_table) );
+        if (strcmp( removeTable, (*db).TABLENAMES[counter] ) != 0) {
+          *newTable = tables[counter];
+          newTables[j] = *newTable;
+          newTableNames[j] = (*db).TABLENAMES[counter];
+          j++;
+        }
+        counter++;
+      }
+      
+    }    
+    // updating database struct
+    (*db).DATATABLES = newTables;
+    (*db).TABLENAMES = newTableNames;
+    writeDatabase(*db, filename);
+  }
+  
+  // .tables command
+  else if (strcmp(cmd, ".tables") == 0) {
+    struct database * db = readDatabase(filename);
+    char ** tables = (*db).TABLENAMES;
+    int i = 0;
+    while (tables[i]) {
+      printf("%s\n", tables[i]);
+      i++;
+    }
   }
 }
 

@@ -69,7 +69,7 @@ struct database * readDatabase( char * filename ){
   }
   char * dbInfo = findStringPair(&fullString, "<DATABASE_INFO>", "<DATABASE_INFO_END>");
   char * tableList = strsep(&dbInfo, "!");
-  printf("dbInfo:[%s]\n", dbInfo );
+  //printf("dbInfo:[%s]\n", dbInfo );
   int * pt = (int *)malloc(sizeof(int));
   *pt = atoi(dbInfo);
   (*db).NUM_OF_TABLES = pt;
@@ -159,6 +159,7 @@ struct data_table turnStringToTable( char ** fullString, char * tablename ){ // 
         if( strcmp(dtValue, "") != 0 ){
           struct data_entry * dataEntry = (struct data_entry *)malloc(sizeof(struct data_entry) * 256);
           (*dataEntry).TYPE = *((*table).TYPES+counter);
+          //printf("DATA ENTRY TYPE: [%s]\n", (*dataEntry).TYPE);
           if( strcmp((*dataEntry).TYPE, "TEXT") == 0 ){
             (*dataEntry).TEXT_VAL = dtValue;
           }else if( strcmp((*dataEntry).TYPE, "INTEGER") == 0 ){
@@ -193,6 +194,7 @@ char * turnTableToString( struct data_table table ){
   int counter = 0;
   length += sprintf(string+length, "<TABLE_INFO:%s>", tablename);
   while( types[counter] ){
+    //printf("types[counter]: [%s]\n", types[counter]);
     if( types[counter + 1]){
       length += sprintf(string+length, "%s|", types[counter]);
     }else{
@@ -228,15 +230,18 @@ char * turnTableToString( struct data_table table ){
           length += sprintf(string+length, "%d|", current.INT_VAL);
         }else{
           printf("Someone done goofed. Type not fouund!\n");
+          exit(0);
         }
       }else{
         struct data_entry current = valueRow[i];
+        //printf("current Type: [%s]\n", current.TYPE);
         if( strcmp(current.TYPE, "TEXT") == 0){
           length += sprintf(string+length, "%s", current.TEXT_VAL);
         }else if( strcmp( current.TYPE, "INTEGER") == 0 ){
           length += sprintf(string+length, "%d", current.INT_VAL);
         }else{
           printf("Someone done goofed. Type not fouund!\n");
+          exit(0);
         }
       }
       i++;

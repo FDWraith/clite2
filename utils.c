@@ -16,7 +16,7 @@ char * findStringPair( char ** originalString, char * firstDenom, char * secondD
 void lock();
 void unlock();
 void printDatabase( struct database * db, char ** listOfTableNames, int numOfTables );
-void printTable( struct data_table * tb);
+void printTable( struct data_table tb);
 
 char * stripWhiteSpace( char ** originalString ){
   char whiteSpace[10] = { ' ', '\n', ';'};
@@ -88,21 +88,62 @@ void printDatabase( struct database * db, char ** listOfTableNames, int numOfTab
     }
     if( (*db).TABLENAMES[i] == NULL ){
       printf("Table %s Not Found\n", listOfTableNames[counter] );
-          exit(0);
+      exit(0);
     }else if( strcmp(listOfTableNames[counter], (*db).TABLENAMES[i] ) == 0){
       //print out table.
-      printTable( &((*db).DATATABLES[i]) );
+      printTable( ((*db).DATATABLES[i]) );
     }else{
       printf("Table %s Does Not Match\n", listOfTableNames[counter] );
     }
   }
 }
 
-void printTable( struct data_table * tb){
-  /*____________________________*
-   *                            *
-   * TINA, PLEASE FILL THIS OUT *
-   *____________________________*
-   *                            *
-  */  
-}
+void printTable( struct data_table tb){
+  char * * headers = (tb).HEADERS;
+  char * tablename = (tb).TABLENAME;
+  char * * types = (tb).TYPES;
+  struct data_entry * * values = (tb).VALUES;
+  char * finalString = (char *)malloc( sizeof(char) * 10000);
+  int length = 0;
+  length += sprintf(finalString, "Printing Table %s\n", tablename);
+  int counter = 0;
+  while( headers[counter] ){
+    if( headers[counter+1] ){
+      length += sprintf(finalString + length, "%s|", headers[counter]);
+    }else{
+      length += sprintf(finalString + length, "%s", headers[counter]);
+    }
+    counter++;
+  }
+  length += sprintf(finalString + length, "\n");
+  counter = 0;
+  while( values != NULL && values[counter] != NULL ){
+    int i = 0;
+    struct data_entry * valueRow = values[counter];
+    while( types[i] ){
+      if( types[i+1] ){
+        if(strcmp( types[i], "TEXT" ) == 0){
+          length += sprintf(finalString + length, "%s|", valueRow[i].TEXT_VAL);
+        }else if( strcmp( types[i], "INTEGER") == 0){
+          length += sprintf(finalString + length, "%d|", valueRow[i].INT_VAL);
+        }else{
+          printf("Type %s Not Found\n", types[i]);
+          exit(0);
+        }
+      }else{
+        if(strcmp( types[i], "TEXT" ) == 0){
+          length += sprintf(finalString + length, "%s", valueRow[i].TEXT_VAL);
+        }else if( strcmp( types[i], "INTEGER") == 0){
+          length += sprintf(finalString + length, "%d", valueRow[i].INT_VAL);
+        }else{
+          printf("Type %s Not Found\n", types[i]);
+          exit(0);
+        }
+      }
+      i++;
+    }
+    length += sprintf(finalString + length, "\n");
+    counter++;
+  }
+  printf("%s", finalString);
+} 
