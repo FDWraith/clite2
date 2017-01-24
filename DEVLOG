@@ -45,3 +45,6 @@ kevinZ -- 2017-01-21 4:17 PM
 tinaL -- 2017-01-23 1:40 AM
     Finally got print to work, realized that ON|OFF commands won't be necessary for our implementation.
     .tables, DELETE, and INSERT are coming along. Somehow broke CREATE while working on those three things... won't push for now so that we have at least one working version of CREATE.
+kevinZ -- 2017-01-23 10:32 PM
+    GOT SELECT TO WORK
+    BOTH OF THEM WORK AS INTENDED
