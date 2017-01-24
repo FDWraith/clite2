@@ -292,6 +292,93 @@ void exec_shell_cmd( char * cmd, char * filename ) {
     writeDatabase(*db, filename);
   }
   
+  else if ( strstr(cmd, "INSERT") != NULL ) {
+    struct database * db = readDatabase(filename);
+    strsep(&cmd, " ");  // get rid of "INSERT"
+    //printf("cmd: %s\n", cmd);
+    strsep(&cmd, " ");  // get rid of "INTO"
+    //printf("cmd: %s\n", cmd);
+    char * tableName = strsep(&cmd, " ");  // remove table name and store it
+    strsep(&cmd, " ");  // get rid of "VALUES"
+    //printf("cmd: %s\n", cmd);
+    cmd = findStringPair(&cmd, "(", ")"); // gets rid of parentheses
+    //printf("strip cmd: %s\n", cmd);
+    
+    // putting values obtained from command into an array: [Alice, 10]
+    char ** values = (char **)malloc(sizeof(char *) * STND_SIZE);
+    int i = 0;
+    while (cmd) {
+      
+      // getting individual listed values
+      char * t = strsep(&cmd, ",");
+      
+      /*printf("taken value %s\n", t);
+      printf("what is left of cmd %s\n", t);*/
+      
+      if (strstr(t, "\""))
+        t = findStringPair(&t, "\"", "\"");
+        
+      stripWhiteSpace(&t);
+      //printf("putting into array %s\n", t);
+      values[i] = t;
+      i++;
+    }
+    values[i] = 0;
+    
+    printf("values[0]: %s\n", values[0]);
+    printf("values[1]: %s\n", values[1]);
+    
+    struct data_table * tables = (*db).DATATABLES;
+    struct data_table * table = (struct data_table *)malloc( sizeof(struct data_table) );
+    
+    // number of tables
+    int n = 0;
+    while( (*db).TABLENAMES[n] != NULL ){
+      n++;
+    }
+    printf("number of tables: %d\n", n);
+    
+    for(i = 0; i < n; i++) {
+      if (strcmp(tableName, tables[i].TABLENAME) == 0) {
+        (*table).TABLENAME = tables[i].TABLENAME;
+        (*table).HEADERS = tables[i].HEADERS;
+        (*table).TYPES = tables[i].TYPES;
+        (*table).VALUES = tables[i].VALUES;
+        break;
+      }
+    }
+    
+    struct data_entry ** deList = (struct data_entry **)malloc (sizeof(struct data_entry *) * 10);
+    deList = table->VALUES;
+    int row = 0;
+    while (deList[i]) {
+      row++;
+    }
+    
+    struct data_entry * de = (struct data_entry *)malloc (sizeof(struct data_entry) * 10);
+    i = 0;
+    while (values[i]) {
+      if (strcmp("TEXT", (table->TYPES)[i]) == 0) {
+        de[i].TYPE = "TEXT";
+        de[i].TEXT_VAL = values[i];
+      }
+      else if (strcmp("INTEGER", (table->TYPES)[i]) == 0) {
+        de[i].TYPE = "INTEGER";
+        de[i].INT_VAL = atoi(values[i]);
+      }
+      i++;
+    }
+    //de[i] = NULL; 
+    
+    deList[row] = de;
+    deList[row+1] = NULL;
+    
+    /*printf("%s\n", deList[row][0].TEXT_VAL);
+    printf("%s\n", deList[row][1].TEXT_VAL);*/
+    table->VALUES = deList;
+    writeDatabase(*db, filename);
+  }
+  
   // .tables command
   else if (strcmp(cmd, ".tables") == 0) {
     struct database * db = readDatabase(filename);
